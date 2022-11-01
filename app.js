@@ -18,7 +18,11 @@ app.get("/login", function(req, res){
 });;
 
 app.get("/signup", function(req, res){
-    res.render("signup.ejs");
+    res.render("signup");
+});
+
+app.get("/events", function(req, res){
+    res.render("events");
 });
 
 app.listen(3000, function() {
