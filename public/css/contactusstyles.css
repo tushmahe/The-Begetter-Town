@@ -1,16 +1,13 @@
-body{
-    background-color: #fefbf3;
-}
-.tbtlogo{
-    margin: 0;
-    padding: 0;
-    padding-left: 5rem;
-    /* padding-bottom: 5rem; */
-}
-
-#navbar1{
-    background-color: #81C1C4;
-}
 .form{
     margin: 4rem;
+}
+#signupSubmit{
+    display:flex;
+    justify-content:center;
+    padding-bottom: 5rem;
+}
+.btn{
+    background-color: #81c1c4;
+    font-size: large;
+    color: white
 }
