@@ -1,0 +1,13 @@
+.form{
+    margin: 4rem;
+}
+#signupSubmit{
+    display:flex;
+    justify-content:center;
+    padding-bottom: 5rem;
+}
+.btn{
+    background-color: #81c1c4;
+    font-size: large;
+    color: white
+}
