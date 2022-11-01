@@ -1,0 +1,19 @@
+.eventtype{
+    font-size: 2rem;
+    margin: 3rem;
+    padding: 3rem;
+}
+.event{
+    margin-top: 20rem;
+    margin-bottom: 20rem;
+    /* padding: auto; */
+    margin: auto;
+    background: #e6e7e8;
+    width: 70rem;
+    /* height: 50rem; */
+    border-radius: 2rem;
+}
+.eventcards{
+    margin: auto;
+    height: 10rem;
+}
