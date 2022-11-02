@@ -31,6 +31,9 @@ app.get("/contactUs", function(req, res){
 app.get("/myprofile", function(req, res){
     res.render("dashboard");
 });
+app.get("/mypost", function(req, res){
+    res.render("mypost");
+});
 
 
 app.listen(3000, function() {
