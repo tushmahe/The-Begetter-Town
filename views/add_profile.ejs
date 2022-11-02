@@ -1,0 +1,36 @@
+<%- include("partials/boiler") -%>
+  <link rel="stylesheet" href="css/add_profile.css">
+  <link rel="stylesheet" href="css/sidebarstyles.css">
+  <%- include("partials/header") -%>
+<%- include("partials/sidebar") -%>
+
+
+
+<form class="data">
+    <div class="form-group postfield">
+      <label for="exampleFormControlInput1" class="postdata">Post Title</label>
+      <input type="email" class="form-control dataplace" id="exampleFormControlInput1" placeholder="">
+    </div>
+    <div class="form-group postfield">
+      <label for="exampleFormControlSelect1" class="postdata">Category</label>
+      <select class="form-control" id="exampleFormControlSelect1">
+        <option>Paintings</option>
+        <option>Jewelleries</option>
+        <option>Handicrafts</option>
+        <option>Photography</option>
+        <option>Fashion</option>
+      </select>
+    </div>
+ 
+    <div class="form-group postfield">
+      <label for="exampleFormControlTextarea1"class="postdata" >Description</label>
+      <textarea class="form-control desc dataplace" id="exampleFormControlTextarea1" rows="5"></textarea>
+    </div>
+
+    <button class="addme">Add Post</button>
+  </form>
+
+
+    
+  </body>
+  
