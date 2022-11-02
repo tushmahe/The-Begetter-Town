@@ -1,0 +1,24 @@
+.userdata{
+    display: flex;
+    flex-direction: row;
+}
+
+.myprofile{
+    margin-left: 5rem;
+}
+
+.data{
+    margin-left: 0.7rem;
+    margin-right: 0.7rem;
+}
+
+.field{
+    background-color: #00e9d5e1;
+    padding-right: 0.4rem;
+    padding-left: 0.4rem;
+    border-radius: 0.2rem;
+}
+
+.bio{
+    height: 1.8rem;
+}

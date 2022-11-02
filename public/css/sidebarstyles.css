@@ -1,0 +1,47 @@
+body{
+    background-color: #fefbf3;
+}
+
+.sidenavbar{
+    width: 12rem;
+    background-color: #e6e7e8;
+    margin-left: 15rem;
+    padding:0;
+    height: 23rem;
+}
+
+h2{
+    margin-left: 15rem;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+}
+
+.line{
+    margin: 0.5rem;
+    color: #b6b6b6;
+    width: 8rem;
+    height: 1px;
+    background-color: #b6b6b6;
+    /* margin-right: 5rem; */
+}
+.nav1{
+    margin-left:0.5rem;
+}
+
+.links{
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.vertical_line{
+    width: 0.1rem;
+    background-color: black;
+    height: 25rem;
+    margin-left: 5rem;
+}
+
+.dash{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 8rem;
+}

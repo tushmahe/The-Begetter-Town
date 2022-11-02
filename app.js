@@ -28,6 +28,10 @@ app.get("/contactUs", function(req, res){
     res.render("contactUs.ejs");
 });
 
+app.get("/myprofile", function(req, res){
+    res.render("dashboard");
+});
+
 
 app.listen(3000, function() {
     console.log("Server started on port 3000");
