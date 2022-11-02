@@ -14,11 +14,14 @@
 }
 
 .cards{
-    display: flex;
-    /* justify-content: space-between; */
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-content:center;
+    align-items: center;
 }
 .card{
-    display: block;
+    margin: 2rem 4rem;
+    width: 18rem;
 }
 .aboutUs{
     padding: 5rem;
