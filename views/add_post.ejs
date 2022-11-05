@@ -1,0 +1,49 @@
+<%- include("partials/boiler") -%>
+  <link rel="stylesheet" href="css/add_post.css">
+  <link rel="stylesheet" href="css/sidebarstyles.css">
+  <%- include("partials/header") -%>
+<%- include("partials/sidebar") -%>
+
+
+
+<form class="data">
+    <div class="form-group postfield">
+      <label for="exampleFormControlInput1" class="postdata">Post Title</label>
+      <input type="email" class="form-control dataplace" id="exampleFormControlInput1" placeholder="">
+    </div>
+
+    <!-- <div class="form-group postfield">
+      <label for="exampleFormControlSelect1" class="postdata">Add Post</label>
+      <select class="form-control" id="exampleFormControlSelect1">
+        <option>Paintings</option>
+        <option>Jewelleries</option>
+        <option>Handicrafts</option>
+        <option>Photography</option>
+        <option>Fashion</option>
+      </select>
+    </div> -->
+
+    <label for="formFileLg" class="form-label postdata">Add Post</label>
+<input class="form-control form-control-lg upfile" id="formFileLg" type="file" />
+     
+    <!-- <div class="form-group postfield">
+         <p>Add Post</p>
+    <form action="/action_page.php">
+      <input type="file" id="myFile" name="filename">
+      <input type="submit">
+    </form>
+    </div> -->
+ 
+ 
+    <div class="form-group postfield">
+      <label for="exampleFormControlTextarea1"class="postdata" >Description</label>
+      <textarea class="form-control desc dataplace" id="exampleFormControlTextarea1" rows="5"></textarea>
+    </div>
+
+    <button class="addme">Add Post</button>
+  </form>
+
+
+    
+  </body>
+  

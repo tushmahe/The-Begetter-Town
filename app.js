@@ -60,6 +60,13 @@ app.get("/contactUs", function(req, res){
 app.get("/myprofile", function(req, res){
     res.render("dashboard");
 });
+app.get("/mypost", function(req, res){
+    res.render("mypost");
+});
+
+app.get("/add_post", function(req, res){
+    res.render("add_post");
+});
 
 
 app.post("/signup", async (req, res) => {
