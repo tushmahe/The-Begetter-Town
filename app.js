@@ -32,8 +32,8 @@ app.get("/myprofile", function(req, res){
     res.render("dashboard");
 });
 
-app.get("/add_profile", function(req, res){
-    res.render("add_profile");
+app.get("/add_post", function(req, res){
+    res.render("add_post");
 });
 
 
