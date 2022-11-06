@@ -17,6 +17,14 @@ app.get("/login", function(req, res){
     res.render("login");
 });;
 
+app.get("/index", function(req, res){
+    res.render("index");
+});;
+
+app.get("/aboutUs", function(req, res){
+    res.render("aboutUs");
+});;
+
 app.get("/signup", function(req, res){
     res.render("signup");
 });
