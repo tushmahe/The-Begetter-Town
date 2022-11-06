@@ -1,0 +1,28 @@
+.cards{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    justify-content:center;
+    align-items: center;
+}
+.card{
+    margin: 2rem 3rem;
+    width: 15rem;
+}
+/* .card:hover{
+
+} */
+.eventcards{
+    margin-right: 3rem;
+    height: 22rem;
+}
+#topic{
+    margin-bottom: 2rem;
+    background: #00e9d5e1;
+    padding:0.5rem;
+    border-radius: 0.5rem;
+}
+.close{
+    height:1.2rem;
+    width:1.2rem;
+    margin:0.2rem;
+}
