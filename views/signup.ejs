@@ -27,7 +27,7 @@
         <h1 class="signup">Sign Up</h1>
     </div>
     <div class="form">
-        <form action = "/signup" method = "POST">
+        <form action = "/signup" method = "POST" id = "reg-form">
             <div class="form-row">
                 <div class="col-md-6 mb-2">
                     <label for="validationDefault01">First name</label>
@@ -626,5 +626,19 @@
     <button class="btn" type="submit">SUBMIT</button>
 </div>
     </form>
+
+    <!-- <script>
+        const form = document.getElementById('reg-form');
+        form.addEventListener('submit', registerUser);
+
+        function registerUser(event){
+            event.preventDefault();
+
+            const name = 
+            const username = 
+            const password = 
+            const 
+        } -->
+    </script>
     </div>
 </body>
