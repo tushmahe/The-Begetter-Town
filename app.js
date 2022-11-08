@@ -114,6 +114,27 @@ app.post("/signup", profilepic.single("profilepicture"), async (req, res) => {
 });
 
 
+app.post("/login",async (req,res)=>{
+    var username =req.body.username;
+    var password=req.body.password
+    console.log(username)
+    console.log(password);
+
+    const useremail= await Profile.findOne({username:username})
+    console.log(username)
+  console.log(useremail)
+  console.log(useremail.Password)
+
+
+  if(useremail.Password==password)
+  res.redirect("index")
+  else
+  res.send("Check your info once again")
+  
+  
+})
+
+
 app.listen(3000, function() {
     console.log("Server started on port 3000");
   });
