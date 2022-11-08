@@ -4,10 +4,10 @@ const mongoose = require("mongoose");
 const path = require("path");
 const crypto = require("crypto");
 const multer = require("multer");
-const GridFsStorage = require("multer-gridfs-storage");
+// const GridFsStorage = require("multer-gridfs-storage");
 const Grid = require("gridfs-stream");
 const methodOverride = require("method-override");
-const Date = require("date");
+// const Date = require("date");
 
 const app = express();
 
@@ -20,15 +20,17 @@ app.use(express.urlencoded({extended: false}));
 
 const conn = mongoose.connect("mongodb://localhost:27017/theBegetterTownDB", {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true
+    useUnifiedTopology: true
+    // useCreateIndex: true
 });
 
 
-const Profile = require("models/profile.model.js");
+const Profile = require("./models/profile.model");
 
 const ProfileStorage = multer.diskStorage({
-    destination: "profilePictures",
+    dest: function (req, file, cb) {
+        cb(null, 'profilePictures/')
+      },
     filename: (req, file, cb) => {
         cb(null, Date.now + file.originalname);
     }
@@ -36,7 +38,7 @@ const ProfileStorage = multer.diskStorage({
 
 const profilepic = multer({
     storage: ProfileStorage
-}).single(ProfileImage);
+});
 
 app.get("/", function(req, res){
     res.render("index");
@@ -54,7 +56,7 @@ app.get("/events", function(req, res){
     res.render("events");
 });
 app.get("/contactUs", function(req, res){
-    res.render("contactUs.ejs");
+    res.render("contactUs");
 });
 
 app.get("/myprofile", function(req, res){
@@ -69,8 +71,7 @@ app.get("/add_post", function(req, res){
 });
 
 
-app.post("/signup", async (req, res) => {
-    try{
+app.post("/signup", profilepic.single("profilepicture"), async (req, res) => {
         var TypeOfUser;
         if(req.body.creator == 1){
             TypeOfUser = "Creator";
@@ -81,7 +82,7 @@ app.post("/signup", async (req, res) => {
 
         const user = new Profile({
             Username: req.body.username,
-            Name: req.body.firstname + req.body.lastname,
+            Name: req.body.firstname + " " + req.body.lastname,
             Email: req.body.email,
             Password: req.body.password,
             Country: req.body.country,
@@ -92,13 +93,16 @@ app.post("/signup", async (req, res) => {
             Address: req.body.city + ", " + req.body.state + ", Zip Code: " + req.body.zip,
             Bio: req.body.bio,
             ProfileImg: {
-                data: 
+                data: req.file,
+                contentType: "image/png"
             }
-        })
-    }
-    catch(error){
-        res.status(400).send(error);
-    }
+        });
+
+        user.save().then(() => res.send("Successfully Uploaded"));
+    
+    // catch(error){
+    //     res.status(400).send("Error occured");
+    // }
 });
 
 

@@ -21,7 +21,7 @@ const profileSchema = mongoose.Schema({
 
     Password: {
         type: String,
-        required: True
+        required: true
     },
 
     Country: {
@@ -43,8 +43,7 @@ const profileSchema = mongoose.Schema({
     },
 
     BusinessEmail: {
-        type: String,
-        unique: true
+        type: String
     },
 
     Address: {
