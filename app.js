@@ -59,7 +59,9 @@ app.get("/aboutUs", function(req, res){
 app.get("/signup", function(req, res){
     res.render("signup");
 });
-
+app.get("/index", function(req, res){
+    res.render("index");
+});
 app.get("/events", function(req, res){
     res.render("events");
 });
