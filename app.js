@@ -17,6 +17,14 @@ app.get("/login", function(req, res){
     res.render("login");
 });;
 
+app.get("/index", function(req, res){
+    res.render("index");
+});;
+
+app.get("/aboutUs", function(req, res){
+    res.render("aboutUs");
+});;
+
 app.get("/signup", function(req, res){
     res.render("signup");
 });
@@ -33,6 +41,10 @@ app.get("/myprofile", function(req, res){
 });
 app.get("/mypost", function(req, res){
     res.render("mypost");
+});
+
+app.get("/add_post", function(req, res){
+    res.render("add_post");
 });
 
 
