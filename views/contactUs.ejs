@@ -4,29 +4,29 @@
 <link rel="stylesheet" href="css/contactusstyles.css">
 <body>
       <div class="form">
-        <form>
+        <form action = "/contactUs" method = "POST" id = "contactus">
             <div class="form-row">
                 <div class="col-md-6 mb-2">
                     <label for="validationDefault01">First name</label>
-                    <input type="text" class="form-control" id="validationDefault01" placeholder="First name"
+                    <input type="text" class="form-control" id="validationDefault01" name = "firstname" placeholder="First name"
                         value="" required>
                 </div>
                 <div class="col-md-6 mb-2">
                     <label for="validationDefault02">Last name</label>
-                    <input type="text" class="form-control" id="validationDefault02" placeholder="Last name"
+                    <input type="text" class="form-control" id="validationDefault02" name = "lastname" placeholder="Last name"
                         value="" required>
                 </div>
                 </div>
             <div class="form-row">
                 <div class="col-md-6 mb-1">
                     <label for="validationDefault02">Email</label>
-                    <input type="email" class="form-control" id="validationDefault02" placeholder="name@example.com"
+                    <input type="email" class="form-control" id="validationDefault02" name = "email" placeholder="name@example.com"
                         value="" required>
                 </div>
             </div>
             <div class="mb-3">
                 <label for="validationTextarea">Message</label>
-                <textarea rows="4" class="form-control" id="validationTextarea" placeholder="Write your message here"
+                <textarea rows="4" class="form-control" id="validationTextarea" name = "message" placeholder="Write your message here"
                     required></textarea>
             </div>
             <div id="signupSubmit">
