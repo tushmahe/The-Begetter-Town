@@ -1,4 +1,4 @@
-console.log("hiii")
+console.log("header")
 
 const currentLocation = location.href;
 const menuItem = document.getElementsByClassName("nav-link");
