@@ -31,6 +31,7 @@ const conn = mongoose.connect("mongodb://localhost:27017/theBegetterTownDB", {
 
 
 const Profile = require("./models/profile.model");
+const ContactUs = require("./models/contactUs.model");
 
 const ProfileStorage = multer.diskStorage({
     dest: function (req, file, cb) {
@@ -162,6 +163,23 @@ app.post("/signup", profilepic.single("profilepicture"), async (req, res) => {
     // return res.cookie({"token":token}).redirect("/");
 });
 
+app.post("/contactUs", async (req, res) => {
+
+    try{
+
+    const msg = await ContactUs.create({
+        Name: req.body.firstname + " " + req.body.lastname,
+        Email: req.body.email,
+        Message: req.body.message
+    });
+
+    // user.save().then(() => res.send("Successfully Uploaded"));
+}catch(error){
+    res.status(400).send("Error occured");
+}
+
+res.redirect("/")
+});
 
 app.post("/login", async (req, res) => {
     const username = req.body.username;
