@@ -4,10 +4,9 @@ const mongoose = require("mongoose");
 const path = require("path");
 const crypto = require("crypto");
 const multer = require("multer");
-// const GridFsStorage = require("multer-gridfs-storage");
 const Grid = require("gridfs-stream");
 const methodOverride = require("method-override");
-// const Date = require("date");
+const bcrypt = require("bcryptjs");
 
 const app = express();
 
@@ -90,11 +89,16 @@ app.post("/signup", profilepic.single("profilepicture"), async (req, res) => {
             TypeOfUser = "User";
         }
 
-        const user = new Profile({
+        const password = await bcrypt.hash(req.body.password, 10);
+
+
+        try{
+
+        const user = await Profile.create({
             Username: req.body.username,
             Name: req.body.firstname + " " + req.body.lastname,
             Email: req.body.email,
-            Password: req.body.password,
+            Password: password,
             Country: req.body.country,
             PhoneNumber: req.body.phonenumber,
             FieldOfInterest: req.body.fieldofinterest,
@@ -108,11 +112,18 @@ app.post("/signup", profilepic.single("profilepicture"), async (req, res) => {
             }
         });
 
-        user.save().then(() => res.send("Successfully Uploaded"));
+        // user.save().then(() => res.send("Successfully Uploaded"));
+    }catch(error){
+        if(error.code === 11000){
+            res.send("Please make sure your username, e-mail ID and phone number are unique");
+        }
+    }
     
     // catch(error){
     //     res.status(400).send("Error occured");
     // }
+
+    res.send("user created successfully");
 });
 
 
