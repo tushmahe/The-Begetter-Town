@@ -2,77 +2,26 @@
   <link rel="stylesheet" href="css/mypoststyles.css">
   <link rel="stylesheet" href="css/sidebarstyles.css">
   <%- include("partials/header") -%>
-<%- include("partials/sidebar") -%>
-<div class="mypost">
-  <label id="topic"><b>PAINTINGS</b></label>
-<div style="overflow-y: scroll;" class="eventcards">
-<div class = "cards">
-  <div class="card">
-    <button type="button" class="close" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-      <img class="card-img-top" src="img/Artcalender.png" alt="Card image cap">
-      <div class="card-body mb-4">
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.<br><a href="#">Read more</a></p>
+    <%- include("partials/sidebar") -%>
+      <div class="mypost">
+        <label id="topic"><b>PAINTINGS</b></label>
+        <div style="overflow-y: scroll;" class="eventcards">
+          <div class="cards">
+            <% for(var i = 0; i < allPosts.length; i++) { %>
+            <div class="card">
+              <button type="button" class="close" aria-label="Close" action = "/deletePost" method = "POST">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <img class="card-img-top" src="img/Artcalender.png" alt="Card image cap">
+              <div class="card-body mb-4">
+                <p><%= allPosts[i].Title %></p>
+                <p class="card-text"><%= allPosts[i].Description.substring(0, 100) %><br><a href="#">Read more</a></p>
+              </div>
+            </div>
+            <% } %>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="card" >
-      <button type="button" class="close" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <img class="card-img-top" src="img/Artcalender.png" alt="Card image cap">
-      <div class="card-body mb-4">
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.<br><a href="#">Read more</a></p>
       </div>
-    </div>
-    <div class="card" >
-      <button type="button" class="close" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <img class="card-img-top" src="img/Artcalender.png" alt="Card image cap">
-      <div class="card-body mb-4">
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.<br><a href="#">Read more</a></p>
-      </div>
-    </div>
-    <div class="card">
-      <button type="button" class="close" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <img class="card-img-top" src="img/Artcalender.png" alt="Card image cap">
-      <div class="card-body mb-4">
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.<br><a href="#">Read more</a></p>
-      </div>
-    </div>
-    <div class="card" >
-      <button type="button" class="close" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <img class="card-img-top" src="img/Artcalender.png" alt="Card image cap">
-      <div class="card-body mb-4">
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.<br><a href="#">Read more</a></p>
-      </div>
-    </div>
-    <div class="card">
-      <button type="button" class="close" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <img class="card-img-top" src="img/Artcalender.png" alt="Card image cap">
-      <div class="card-body mb-4">
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.<br><a href="#">Read more</a></p>
-      </div>
-    </div>
-    <div class="card" >
-      <button type="button" class="close" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <img class="card-img-top" src="img/Artcalender.png" alt="Card image cap">
-      <div class="card-body mb-4">
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.<br><a href="#">Read more</a></p>
-      </div>
-    </div>
-</div>
-</div>
-</div>
-</div>
-<%- include("partials/footer") -%>
-</body>
+      <%- include("partials/footer") -%>
+        </body>

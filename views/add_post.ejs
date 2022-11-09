@@ -6,20 +6,20 @@
 
 
 
-<form class="data">
+<form class="data" action = "/add_post" method = "POST">
     <div class="form-group postfield">
       <label for="exampleFormControlInput1" class="postdata">Post Title</label>
-      <input type="email" class="form-control dataplace" id="exampleFormControlInput1" placeholder="">
+      <input type="text" class="form-control dataplace" id="exampleFormControlInput1" name = "title">
     </div>
 
 
     <label for="formFileLg" class="form-label postdata">Choose image</label>
-<input class="form-control form-control-lg upfile" id="formFileLg" type="file" />
+<input class="form-control form-control-lg upfile" id="formFileLg" type="file" name = "image"/>
  
  
     <div class="form-group postfield">
       <label for="exampleFormControlTextarea1"class="postdata" >Description</label>
-      <textarea class="form-control desc dataplace" id="exampleFormControlTextarea1" rows="5"></textarea>
+      <textarea class="form-control desc dataplace" id="exampleFormControlTextarea1" minlength = "100" rows="5" name = "description"></textarea>
     </div>
 
     <button class="addme">Add Post</button>

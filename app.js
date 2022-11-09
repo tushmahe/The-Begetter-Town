@@ -32,6 +32,7 @@ const conn = mongoose.connect("mongodb://localhost:27017/theBegetterTownDB", {
 
 const Profile = require("./models/profile.model");
 const ContactUs = require("./models/contactUs.model");
+const Post = require("./models/post.model");
 
 const ProfileStorage = multer.diskStorage({
     dest: function (req, file, cb) {
@@ -46,36 +47,20 @@ const profilepic = multer({
     storage: ProfileStorage
 });
 
-// const isAuthenticated = async (req,res,next)=>{
-//     try {
-//         const {token} = req.cookies;
-//         if(!token){
-//             return false;
-//         }
-//         const verify = await jwt.verify(token, JWT_SECRET);
-//         req.user = await Profile.findById(verify.id);
-
-//     } catch (error) {
-//        return next(error); 
-//     }
-// }
 
 app.get("*", checkUser);
 
-app.get("/", function (req, res) {
-    // if(req.isAuthenticated()){
-    //     res.render("index.ejs", loggedIn = true);
-    // }
-    res.render("index");
+app.get("/", async function (req, res) {
+    const all = await Post.find({});
+
+    // console.log(all);
+    res.render("index", allPosts = all);
 });
 
 app.get("/login", function (req, res) {
     res.render("login");
 });;
 
-// app.get("/index", function(req, res){
-//     res.render("index");
-// });;
 
 app.get("/aboutUs", function (req, res) {
     res.render("aboutUs");
@@ -84,9 +69,7 @@ app.get("/aboutUs", function (req, res) {
 app.get("/signup", function (req, res) {
     res.render("signup");
 });
-// app.get("/index", function(req, res){
-//     res.render("index");
-// });
+
 app.get("/events", function (req, res) {
     res.render("events");
 });
@@ -215,6 +198,32 @@ app.get("/logout", (req, res) => {
     res.cookie('jwt', "", {maxAge: 1});
     res.redirect('/');
 });
+
+app.post("/add_post", (req, res) => {
+    const token = req.cookies.jwt;
+
+    jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
+        if (err) {
+            console.log(err);
+            res.redirect("/login");
+        }
+        else {
+            let user = await Profile.findById(decodedToken.id);
+
+            const newPost = await Post.create({
+                Username: user.Username,
+                Title: req.body.title,
+                Description: req.body.description,
+                Category: user.FieldOfInterest
+            });
+            
+        }
+    })
+
+    // console.log(user.Username);
+
+    res.redirect("/");
+})
 
 app.listen(3000, function () {
     console.log("Server started on port 3000");
