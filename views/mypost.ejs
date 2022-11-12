@@ -7,21 +7,34 @@
         <label id="topic"><b>PAINTINGS</b></label>
         <div style="overflow-y: scroll;" class="eventcards">
           <div class="cards">
-            <% for(var i = 0; i < allPosts.length; i++) { %>
-            <div class="card">
-              <button type="button" class="close" aria-label="Close" action = "/deletePost" method = "POST">
-                <span aria-hidden="true">&times;</span>
-              </button>
-              <img class="card-img-top" src="img/Artcalender.png" alt="Card image cap">
-              <div class="card-body mb-4">
-                <p><%= allPosts[i].Title %></p>
-                <p class="card-text"><%= allPosts[i].Description.substring(0, 100) %><br><a href="#">Read more</a></p>
+            <% for(var i=0; i < allPosts.length; i++) { %>
+              <div class="card">
+                <form action="/deletePost" , method="POST">
+                  <input type="text" class="inputfield" name="title" value="<%= allPosts[i].Title %>">
+                  <button class="btn" type="submit">X</button>
+                </form>
+                <img class="card-img-top" src="img/Artcalender.png" alt="Card image cap">
+                <div class="card-body mb-4">
+                  <p>
+                    <%= allPosts[i].Title %>
+                  </p>
+                  <p class="card-text">
+                    <%= allPosts[i].Description.substring(0, 100) %><br><a href="#">Read more</a>
+                  </p>
+                </div>
               </div>
-            </div>
-            <% } %>
+              <% } %>
           </div>
         </div>
       </div>
       </div>
       <%- include("partials/footer") -%>
+
         </body>
+        <script>
+          const arr = document.getElementsByClassName("inputfield");
+
+          for(var i = 0; i < arr.length; i++){
+            arr[i].style.display = "none";
+          }
+        </script>

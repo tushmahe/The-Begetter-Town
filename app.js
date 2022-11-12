@@ -49,6 +49,7 @@ const profilepic = multer({
 
 
 app.get("*", checkUser);
+app.post("*", checkUser);
 
 app.get("/", async function (req, res) {
     const all = await Post.find({});
@@ -130,50 +131,39 @@ app.post("/signup", profilepic.single("profilepicture"), async (req, res) => {
         );
 
         return res.cookie({ "token": token }).redirect("/login");
-
-
-        // user.save().then(() => res.send("Successfully Uploaded"));
     } catch (error) {
         if (error.code === 11000) {
             res.send("Please make sure your username, e-mail ID and phone number are unique");
         }
     }
-
-    // catch(error){
-    //     res.status(400).send("Error occured");
-    // }
-
-    // return res.cookie({"token":token}).redirect("/");
 });
 
 app.post("/contactUs", async (req, res) => {
 
-    try{
+    try {
 
-    const msg = await ContactUs.create({
-        Name: req.body.firstname + " " + req.body.lastname,
-        Email: req.body.email,
-        Message: req.body.message
-    });
+        const msg = await ContactUs.create({
+            Name: req.body.firstname + " " + req.body.lastname,
+            Email: req.body.email,
+            Message: req.body.message
+        });
+    } catch (error) {
+        res.status(400).send("Error occured");
+    }
 
-    // user.save().then(() => res.send("Successfully Uploaded"));
-}catch(error){
-    res.status(400).send("Error occured");
-}
-
-res.redirect("/")
+    res.redirect("/")
 });
 
 app.post("/login", async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
-    const user = await Profile.findOne({ username: username });
+    const user = await Profile.findOne({ Username: username });
+
+    console.log(user);
 
     if (user) {
 
-        console.log(user);
         if (bcrypt.compare(password, user.Password)) {
-            // the username, password combination is successful
 
             const token = jwt.sign(
                 {
@@ -181,21 +171,32 @@ app.post("/login", async (req, res) => {
                     username: user.Username
                 },
                 JWT_SECRET
-            )
+            );
 
-            res.cookie('jwt', token);
+            res.cookie('jwt', token, { maxAge: 100000000000 });
+            // const all = await Post.find({});
+            // res.render("index", allPosts = all);
             // res.render("index.ejs");
+            // return res.redirect("/");
+            // res.render("index.ejs");
+
+            console.log("Logged in successfully");
+
+            res.redirect("/");
+        }
+        else {
+            res.send("Incorrect Password");
         }
 
-        res.send("incorrect password");
+        // res.send("incorrect password");
     }
-    else{
+    else {
         res.send("incorrect username");
     }
 });
 
 app.get("/logout", (req, res) => {
-    res.cookie('jwt', "", {maxAge: 1});
+    res.cookie('jwt', "", { maxAge: 1 });
     res.redirect('/');
 });
 
@@ -216,14 +217,25 @@ app.post("/add_post", (req, res) => {
                 Description: req.body.description,
                 Category: user.FieldOfInterest
             });
-            
+
         }
     })
 
-    // console.log(user.Username);
-
     res.redirect("/");
-})
+});
+
+app.post("/deletePost", async (req, res) => {
+    // console.log(req.body.title);
+
+    const thispost = await Post.findOne({Title: req.body.title});
+
+    console.log(thispost);
+
+    Post.findOneAndRemove({Title: req.body.title}, () => {
+        res.redirect("/myprofile");
+    })
+    // res.redirect("/mypost");
+});
 
 app.listen(3000, function () {
     console.log("Server started on port 3000");

@@ -6,12 +6,12 @@ const Profile = require("../models/profile.model.js");
 const requireAuth = (req, res, next) => {
     const token = req.cookies.jwt;
 
-    console.log(token);
+    // console.log(token);
 
     if (token) {
         jwt.verify(token, SECRET_KEY, (err, decodedToken) => {
             if (err) {
-                console.log(err);
+                console.log("Error occured");
                 res.redirect("/login");
             }
             else {
@@ -20,6 +20,7 @@ const requireAuth = (req, res, next) => {
         })
     }
     else {
+        console.log("not logged in");
         res.redirect('/login');
     }
 }
