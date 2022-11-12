@@ -256,9 +256,8 @@ app.post("/deletePost", async (req, res) => {
     console.log(thispost);
 
     Post.findOneAndRemove({Title: req.body.title}, () => {
-        res.redirect("/myprofile");
-    })
-    // res.redirect("/mypost");
+        res.redirect("/mypost");
+    });
 });
 
 app.listen(3000, function () {
