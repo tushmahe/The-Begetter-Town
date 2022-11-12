@@ -2,41 +2,101 @@
   <link rel="stylesheet" href="css/dashboardstyles.css">
   <link rel="stylesheet" href="css/sidebarstyles.css">
   <%- include("partials/header") -%>
-<%- include("partials/sidebar") -%>
-      <div class="myprofile">
-        <div class="userdata">
-          <p class="data field">Name</p>
-          <p class="data">:</p>
-          <p class="data"><%= user.Name %></p>
-        </div>
-        <div class="userdata">
-          <p class="data field">Username</p>
-          <p class="data">:</p>
-          <p class="data"><%= user.Username %></p>
-        </div>
-        <div class="userdata">
-          <p class="data field">Email</p>
-          <p class="data">:</p>
-          <p class="data"><%= user.Email %></p>
-        </div>
-        <div class="userdata">
-          <p class="data field bio">Bio</p>
-          <p class="data">:</p>
-          <p class="data"><%= user.Bio %></p>
-        </div>
-        <div class="userdata">
-          <p class="data field">Country Region</p>
-          <p class="data">:</p>
-          <p class="data"><%= user.Country %></p>
-        </div>
-        <div class="userdata">
-          <p class="data field">Field of Interest</p>
-          <p class="data">:</p>
-          <p class="data"><%= user.FieldOfInterest %></p>
-        </div>
-      </div>
+    <%- include("partials/sidebar") -%>
 
-    </div>
+      <% if(!otheruser) { %>
+        <div class="myprofile">
+          <div class="userdata">
+            <p class="data field">Name</p>
+            <p class="data">:</p>
+            <p class="data">
+              <%= user.Name %>
+            </p>
+          </div>
+          <div class="userdata">
+            <p class="data field">Username</p>
+            <p class="data">:</p>
+            <p class="data">
+              <%= user.Username %>
+            </p>
+          </div>
+          <div class="userdata">
+            <p class="data field">Email</p>
+            <p class="data">:</p>
+            <p class="data">
+              <%= user.Email %>
+            </p>
+          </div>
+          <div class="userdata">
+            <p class="data field bio">Bio</p>
+            <p class="data">:</p>
+            <p class="data">
+              <%= user.Bio %>
+            </p>
+          </div>
+          <div class="userdata">
+            <p class="data field">Country Region</p>
+            <p class="data">:</p>
+            <p class="data">
+              <%= user.Country %>
+            </p>
+          </div>
+          <div class="userdata">
+            <p class="data field">Field of Interest</p>
+            <p class="data">:</p>
+            <p class="data">
+              <%= user.FieldOfInterest %>
+            </p>
+          </div>
+        </div>
 
-    <%- include("partials/footer") -%>
-      </body>
+        <% } else { %>
+          <div class="myprofile">
+            <div class="userdata">
+              <p class="data field">Name</p>
+              <p class="data">:</p>
+              <p class="data">
+                <%= otheruser.Name %>
+              </p>
+            </div>
+            <div class="userdata">
+              <p class="data field">Username</p>
+              <p class="data">:</p>
+              <p class="data">
+                <%= otheruser.Username %>
+              </p>
+            </div>
+            <div class="userdata">
+              <p class="data field">Email</p>
+              <p class="data">:</p>
+              <p class="data">
+                <%= otheruser.Email %>
+              </p>
+            </div>
+            <div class="userdata">
+              <p class="data field bio">Bio</p>
+              <p class="data">:</p>
+              <p class="data">
+                <%= otheruser.Bio %>
+              </p>
+            </div>
+            <div class="userdata">
+              <p class="data field">Country Region</p>
+              <p class="data">:</p>
+              <p class="data">
+                <%= otheruser.Country %>
+              </p>
+            </div>
+            <div class="userdata">
+              <p class="data field">Field of Interest</p>
+              <p class="data">:</p>
+              <p class="data">
+                <%= otheruser.FieldOfInterest %>
+              </p>
+            </div>
+          </div>
+
+          <% } %>
+        </div>
+            <%- include("partials/footer") -%>
+              </body>
