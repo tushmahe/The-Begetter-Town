@@ -53,7 +53,7 @@ app.get("*", checkUser);
 app.get("/", async function (req, res) {
     const all = await Post.find({});
 
-    // console.log(all);
+    console.log(all);
     res.render("index", allPosts = all);
 });
 
@@ -80,9 +80,8 @@ app.get("/contactUs", function (req, res) {
 app.get("/myprofile", requireAuth, function (req, res) {
     res.render("dashboard");
 });
-app.get("/mypost", requireAuth, function (req, res) {
-    res.render("mypost");
-});
+
+
 
 app.get("/add_post", requireAuth, function (req, res) {
     res.render("add_post");
@@ -167,7 +166,7 @@ res.redirect("/")
 app.post("/login", async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
-    const user = await Profile.findOne({ username: username });
+    const user = await Profile.findOne({ Username: username });
 
     if (user) {
 
@@ -183,7 +182,7 @@ app.post("/login", async (req, res) => {
                 JWT_SECRET
             )
 
-            res.cookie('jwt', token);
+            res.cookie('jwt', token).redirect("/index")
             // res.render("index.ejs");
         }
 
@@ -192,6 +191,29 @@ app.post("/login", async (req, res) => {
     else{
         res.send("incorrect username");
     }
+});
+
+
+app.get("/mypost", requireAuth, async function(req, res) {
+    const token = req.cookies.jwt;
+
+    jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
+        if (err) {
+            console.log(err);
+            // res.redirect("/login");
+        }
+        else{
+            let user = await Profile.findById(decodedToken.id);
+            const all = await Post.find({Username:user.Username});
+
+            // console.log(all);
+        
+            res.render("mypost",allPosts = all);
+        }
+    })
+  
+   
+   
 });
 
 app.get("/logout", (req, res) => {
@@ -209,7 +231,9 @@ app.post("/add_post", (req, res) => {
         }
         else {
             let user = await Profile.findById(decodedToken.id);
-
+            console.log("***********************************")
+             console.log(user)
+             console.log("***********************************")
             const newPost = await Post.create({
                 Username: user.Username,
                 Title: req.body.title,
