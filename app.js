@@ -257,9 +257,9 @@ app.post("/add_post", (req, res) => {
         }
         else {
             let user = await Profile.findById(decodedToken.id);
-            console.log("***********************************")
+            // console.log("***********************************")
              console.log(user)
-             console.log("***********************************")
+            //  console.log("***********************************")
             const newPost = await Post.create({
                 Username: user.Username,
                 Title: req.body.title,
