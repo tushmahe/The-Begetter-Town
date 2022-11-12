@@ -57,11 +57,12 @@ const profilepic = multer({
 
 
 app.get("*", checkUser);
+app.post("*", checkUser);
 
 app.get("/", async function (req, res) {
     const all = await Post.find({});
 
-    // console.log(all);
+    console.log(all);
     res.render("index", allPosts = all);
 });
 
@@ -88,9 +89,8 @@ app.get("/contactUs", function (req, res) {
 app.get("/myprofile", requireAuth, function (req, res) {
     res.render("dashboard");
 });
-app.get("/mypost", requireAuth, function (req, res) {
-    res.render("mypost");
-});
+
+
 
 app.get("/add_post", requireAuth, function (req, res) {
     res.render("add_post");
@@ -138,9 +138,6 @@ app.post("/signup", profilepic.single("profilepicture"), async (req, res) => {
         );
 
         return res.cookie({ "token": token }).redirect("/login");
-
-
-        // user.save().then(() => res.send("Successfully Uploaded"));
     } catch (error) {
         if (error.code === 11000) {
             // const username = await Profile.findOne({ Username : req.body.username });
@@ -161,53 +158,36 @@ app.post("/signup", profilepic.single("profilepicture"), async (req, res) => {
             // res.redirect("signup");
         }
     }
-
-    // catch(error){
-    //     res.status(400).send("Error occured");
-    // }
-
-    // return res.cookie({"token":token}).redirect("/");
 });
 
 app.post("/contactUs", async (req, res) => {
 
     try{
-        var name = req.body.firstname + " " + req.body.lastname;
-        var email = req.body.email;
-        var msg = req.body.message;
-        const options  = {
-            from: 'tushmaheshwari@outlook.com',
-            to: 'tushmaheshwari28@gmail.com',
-            subject: 'Message from The Begetter Town',
-            text: `Name : ${name}
-                   Email: ${email}
-                   Message: ${msg}`
-        };
 
-        transporter.sendMail(options, function(err, info){
-            if(err){
-                console.log(err);
-            }
-            console.log("Sent : " + info.response);
-        })
+    const msg = await ContactUs.create({
+        Name: req.body.firstname + " " + req.body.lastname,
+        Email: req.body.email,
+        Message: req.body.message
+    });
 
+    // user.save().then(() => res.send("Successfully Uploaded"));
 }catch(error){
     res.status(400).send("Error occured");
 }
 
-res.redirect("/")
+    res.redirect("/")
 });
 
 app.post("/login", async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
-    const user = await Profile.findOne({ username: username });
+    const user = await Profile.findOne({ Username: username });
+
+    console.log(user);
 
     if (user) {
 
-        console.log(user);
         if (bcrypt.compare(password, user.Password)) {
-            // the username, password combination is successful
 
             const token = jwt.sign(
                 {
@@ -215,21 +195,55 @@ app.post("/login", async (req, res) => {
                     username: user.Username
                 },
                 JWT_SECRET
-            )
+            );
 
-            res.cookie('jwt', token);
+            res.cookie('jwt', token, { maxAge: 100000000000 });
+            // const all = await Post.find({});
+            // res.render("index", allPosts = all);
             // res.render("index.ejs");
+            // return res.redirect("/").redirect("/index")
+            // res.render("index.ejs");
+
+            console.log("Logged in successfully");
+
+            res.redirect("/");
+        }
+        else {
+            res.send("Incorrect Password");
         }
 
-        res.send("incorrect password");
+        // res.send("incorrect password");
     }
-    else{
+    else {
         res.send("incorrect username");
     }
 });
 
+
+app.get("/mypost", requireAuth, async function(req, res) {
+    const token = req.cookies.jwt;
+
+    jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
+        if (err) {
+            console.log(err);
+            // res.redirect("/login");
+        }
+        else{
+            let user = await Profile.findById(decodedToken.id);
+            const all = await Post.find({Username:user.Username});
+
+            // console.log(all);
+        
+            res.render("mypost",allPosts = all);
+        }
+    })
+  
+   
+   
+});
+
 app.get("/logout", (req, res) => {
-    res.cookie('jwt', "", {maxAge: 1});
+    res.cookie('jwt', "", { maxAge: 1 });
     res.redirect('/');
 });
 
@@ -243,21 +257,34 @@ app.post("/add_post", (req, res) => {
         }
         else {
             let user = await Profile.findById(decodedToken.id);
-
+            console.log("***********************************")
+             console.log(user)
+             console.log("***********************************")
             const newPost = await Post.create({
                 Username: user.Username,
                 Title: req.body.title,
                 Description: req.body.description,
                 Category: user.FieldOfInterest
             });
-            
+
         }
     })
 
-    // console.log(user.Username);
-
     res.redirect("/");
-})
+});
+
+app.post("/deletePost", async (req, res) => {
+    // console.log(req.body.title);
+
+    const thispost = await Post.findOne({Title: req.body.title});
+
+    console.log(thispost);
+
+    Post.findOneAndRemove({Title: req.body.title}, () => {
+        res.redirect("/myprofile");
+    })
+    // res.redirect("/mypost");
+});
 
 app.listen(8080, function () {
     console.log("Server started on port 3000");
