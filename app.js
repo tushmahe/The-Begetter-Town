@@ -10,6 +10,15 @@ const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const { requireAuth, checkUser } = require('./middleware/auth');
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+    service:'hotmail',
+    auth: {
+        user: 'tushmaheshwari@outlook.com',
+        pass: 'Tushmahe@123'
+    }
+});
 
 const app = express();
 
@@ -31,7 +40,6 @@ const conn = mongoose.connect("mongodb://localhost:27017/theBegetterTownDB", {
 
 
 const Profile = require("./models/profile.model");
-const ContactUs = require("./models/contactUs.model");
 const Post = require("./models/post.model");
 
 const ProfileStorage = multer.diskStorage({
@@ -132,23 +140,40 @@ app.post("/signup", profilepic.single("profilepicture"), async (req, res) => {
         return res.cookie({ "token": token }).redirect("/login");
     } catch (error) {
         if (error.code === 11000) {
+            // const username = await Profile.findOne({ Username : req.body.username });
+            // if(username!=null){
+            //     app.get('/', function(req, res) {
+            //         res.render('signup', { username: username});
+            //     });
+            // }
+            // const email = await Profile.findOne({Email: req.body.email});
+            // if(email){
+                
+            // }
+            // const phoneno = await Profile.findOne({PhoneNumber: req.body.phonenumber});
+            // if(phoneno){
+                
+            // }
             res.send("Please make sure your username, e-mail ID and phone number are unique");
+            // res.redirect("signup");
         }
     }
 });
 
 app.post("/contactUs", async (req, res) => {
 
-    try {
+    try{
 
-        const msg = await ContactUs.create({
-            Name: req.body.firstname + " " + req.body.lastname,
-            Email: req.body.email,
-            Message: req.body.message
-        });
-    } catch (error) {
-        res.status(400).send("Error occured");
-    }
+    const msg = await ContactUs.create({
+        Name: req.body.firstname + " " + req.body.lastname,
+        Email: req.body.email,
+        Message: req.body.message
+    });
+
+    // user.save().then(() => res.send("Successfully Uploaded"));
+}catch(error){
+    res.status(400).send("Error occured");
+}
 
     res.redirect("/")
 });
@@ -261,6 +286,6 @@ app.post("/deletePost", async (req, res) => {
     // res.redirect("/mypost");
 });
 
-app.listen(3000, function () {
+app.listen(8080, function () {
     console.log("Server started on port 3000");
 });
