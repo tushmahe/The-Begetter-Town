@@ -93,6 +93,8 @@ app.get("/post_details/:postTitle", async function (req, res) {
 
     res.render("post_details", thispost = post);
 });
+
+
 app.get("/myprofile", requireAuth, function (req, res) {
     res.render("dashboard", otheruser = null);
 });
@@ -293,7 +295,7 @@ app.post("/deletePost", async (req, res) => {
 });
 
 app.get("/profile/:username", async (req, res) =>{
-    console.log(req.params.username);
+    // console.log(req.params.username);
     var creator = await Profile.findOne({Username: req.params.username});
     res.render("dashboard", otheruser = creator);
 });
