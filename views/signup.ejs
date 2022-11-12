@@ -20,7 +20,8 @@
         rel="stylesheet">
     <link rel="stylesheet" href="css/signupstyles.css">
 </head>
-<% var flag = 1; %>
+<!-- <% var username; %> -->
+<% var flag=1; %>
 <body>
     <div class="title">
         <h1 class="signup">Sign Up</h1>
@@ -37,8 +38,14 @@
                     <input type="text" class="form-control" id="validationDefault02" placeholder="Last name" name = "lastname" 
                         required>
                 </div>
-                <% if(flag==1){ %>
-                    <div class="col-md-6 mb-1">
+                <!-- <div class="col-md-6 mb-1" id="username">
+                    <label for="validationServer03" class="form-label">Username</label>
+                    <input type="text" class="form-control is-invalid" id="validationServer03" aria-describedby="validationServer03Feedback" required>
+                    <div id="validationServer03Feedback" class="invalid-feedback">
+                      This username has already been used.
+                    </div>
+                  </div> -->
+                    <div class="col-md-6 mb-1" id="username">
                         <label for="validationDefaultUsername">Username</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
@@ -48,15 +55,6 @@
                                 aria-describedby="inputGroupPrepend2" required>
                         </div>
                 </div>
-                 <% } else{ %>
-                    <div class="col-md-6 mb-1">
-                        <label for="validationServer03" class="form-label">Username</label>
-                        <input type="text" class="form-control is-invalid" id="validationServer03" aria-describedby="validationServer03Feedback" required>
-                        <div id="validationServer03Feedback" class="invalid-feedback">
-                          This username has already been used.
-                        </div>
-                      </div>
-                  <% } %>
                 <div class="col-md-6 mb-2">
                     <label for="validationDefault02">Password</label>
                     <input type="password" class="form-control" id="validationDefault02" name = "password" required>
@@ -659,4 +657,14 @@
     <!-- </script> -->
     </div>
 </body>
-<script src="script\signup_script.js"></script>
+<!-- <script>
+    if(username==null){
+        console.log(username)
+    let userhtml = document.getElementById("username");
+    userhtml.innerHTML = `<label for="validationServer03" class="form-label">Username</label>
+                    <input type="text" class="form-control is-invalid" id="validationServer03" aria-describedby="validationServer03Feedback" required>
+                    <div id="validationServer03Feedback" class="invalid-feedback">
+                      This username has already been used.
+                    </div>`
+    }
+</script> -->
