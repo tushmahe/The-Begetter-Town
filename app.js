@@ -27,7 +27,8 @@ const JWT_SECRET = "uilfyvas4563677^$%&yufvy^T&YUVH&^vjuvgutcuk^&UVf&^FuVUfo6^vl
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static("public"));
+// app.use(express.static("public"));
+app.use(express.static(__dirname + "/public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -86,6 +87,11 @@ app.get("/contactUs", function (req, res) {
     res.render("contactUs");
 });
 
+app.get("/post_details/:postTitle", async function (req, res) {
+    const post = await Post.findOne({Title: req.params.postTitle});
+
+    res.render("post_details", thispost = post);
+});
 app.get("/myprofile", requireAuth, function (req, res) {
     res.render("dashboard");
 });
