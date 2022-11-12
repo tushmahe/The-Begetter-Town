@@ -10,6 +10,15 @@ const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const { requireAuth, checkUser } = require('./middleware/auth');
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+    service:'hotmail',
+    auth: {
+        user: 'tushmaheshwari@outlook.com',
+        pass: 'Tushmahe@123'
+    }
+});
 
 const app = express();
 
@@ -31,7 +40,6 @@ const conn = mongoose.connect("mongodb://localhost:27017/theBegetterTownDB", {
 
 
 const Profile = require("./models/profile.model");
-const ContactUs = require("./models/contactUs.model");
 const Post = require("./models/post.model");
 
 const ProfileStorage = multer.diskStorage({
@@ -135,7 +143,22 @@ app.post("/signup", profilepic.single("profilepicture"), async (req, res) => {
         // user.save().then(() => res.send("Successfully Uploaded"));
     } catch (error) {
         if (error.code === 11000) {
+            // const username = await Profile.findOne({ Username : req.body.username });
+            // if(username!=null){
+            //     app.get('/', function(req, res) {
+            //         res.render('signup', { username: username});
+            //     });
+            // }
+            // const email = await Profile.findOne({Email: req.body.email});
+            // if(email){
+                
+            // }
+            // const phoneno = await Profile.findOne({PhoneNumber: req.body.phonenumber});
+            // if(phoneno){
+                
+            // }
             res.send("Please make sure your username, e-mail ID and phone number are unique");
+            // res.redirect("signup");
         }
     }
 
@@ -149,14 +172,25 @@ app.post("/signup", profilepic.single("profilepicture"), async (req, res) => {
 app.post("/contactUs", async (req, res) => {
 
     try{
+        var name = req.body.firstname + " " + req.body.lastname;
+        var email = req.body.email;
+        var msg = req.body.message;
+        const options  = {
+            from: 'tushmaheshwari@outlook.com',
+            to: 'tushmaheshwari28@gmail.com',
+            subject: 'Message from The Begetter Town',
+            text: `Name : ${name}
+                   Email: ${email}
+                   Message: ${msg}`
+        };
 
-    const msg = await ContactUs.create({
-        Name: req.body.firstname + " " + req.body.lastname,
-        Email: req.body.email,
-        Message: req.body.message
-    });
+        transporter.sendMail(options, function(err, info){
+            if(err){
+                console.log(err);
+            }
+            console.log("Sent : " + info.response);
+        })
 
-    // user.save().then(() => res.send("Successfully Uploaded"));
 }catch(error){
     res.status(400).send("Error occured");
 }
@@ -225,6 +259,6 @@ app.post("/add_post", (req, res) => {
     res.redirect("/");
 })
 
-app.listen(3000, function () {
+app.listen(8080, function () {
     console.log("Server started on port 3000");
 });
