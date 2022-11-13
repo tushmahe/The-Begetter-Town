@@ -94,12 +94,13 @@ app.get("/post_details/:postTitle", async function (req, res) {
     res.render("post_details", thispost = post);
 });
 
-
+app.get("/explore_by_category/:category", async function (req, res) {
+    const cate = await Post.find({Category: req.params.category});
+    res.render("categories", {postcategory: req.params.category, posts:cate});
+});
 app.get("/myprofile", requireAuth, function (req, res) {
     res.render("dashboard", otheruser = null);
 });
-
-
 
 app.get("/add_post", requireAuth, function (req, res) {
     res.render("add_post");
