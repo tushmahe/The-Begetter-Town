@@ -92,11 +92,18 @@ app.get("/post_details/:postTitle", async function (req, res) {
 
     res.render("post_details", thispost = post);
 });
+
+app.get("/explore_by_category/:category", async function (req, res) {
+    // console.log(req.params.category);
+    const cate = await Post.find({Category: req.params.category});
+    const title = req.params.category;
+    // console.log(cate);
+    res.render("categories", {posts : cate, postcategory : title});
+});
+
 app.get("/myprofile", requireAuth, function (req, res) {
     res.render("dashboard");
 });
-
-
 
 app.get("/add_post", requireAuth, function (req, res) {
     res.render("add_post");

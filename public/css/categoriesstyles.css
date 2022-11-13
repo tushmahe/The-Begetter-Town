@@ -1,0 +1,24 @@
+.cara{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 4rem;
+}
+.carousel{
+    margin-top: 2rem;
+    width: 40rem;
+}
+.explore{
+    margin-left: 4rem;
+    font-size: 2rem;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-content:center;
+    align-items: center;
+}
+.card{
+    margin: 2rem 4rem;
+    width: 18rem;
+}
