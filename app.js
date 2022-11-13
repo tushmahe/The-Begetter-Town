@@ -42,6 +42,7 @@ const conn = mongoose.connect("mongodb://localhost:27017/theBegetterTownDB", {
 
 const Profile = require("./models/profile.model");
 const Post = require("./models/post.model");
+const { profileEnd } = require("console");
 
 const ProfileStorage = multer.diskStorage({
     dest: function (req, file, cb) {
@@ -92,8 +93,10 @@ app.get("/post_details/:postTitle", async function (req, res) {
 
     res.render("post_details", thispost = post);
 });
+
+
 app.get("/myprofile", requireAuth, function (req, res) {
-    res.render("dashboard");
+    res.render("dashboard", otheruser = null);
 });
 
 
@@ -263,9 +266,9 @@ app.post("/add_post", (req, res) => {
         }
         else {
             let user = await Profile.findById(decodedToken.id);
-            console.log("***********************************")
+            // console.log("***********************************")
              console.log(user)
-             console.log("***********************************")
+            //  console.log("***********************************")
             const newPost = await Post.create({
                 Username: user.Username,
                 Title: req.body.title,
@@ -291,6 +294,12 @@ app.post("/deletePost", async (req, res) => {
     });
 });
 
-app.listen(8080, function () {
+app.get("/profile/:username", async (req, res) =>{
+    // console.log(req.params.username);
+    var creator = await Profile.findOne({Username: req.params.username});
+    res.render("dashboard", otheruser = creator);
+});
+
+app.listen(3000, function () {
     console.log("Server started on port 3000");
 });
