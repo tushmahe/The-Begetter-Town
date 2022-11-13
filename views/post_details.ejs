@@ -1,0 +1,25 @@
+<%- include("partials/boiler") -%>
+  <link rel="stylesheet" href="/css/post_detailsstyles.css">
+  <%- include("partials/header") -%>
+  <div class="myprofile">
+    <div class="userdata">
+      <p class="data field">Title</p>
+      <p class="data">:</p>
+      <p class="data"><%= thispost.Title %></p>
+    </div>
+  <div id="post">
+        <img class="d-block w-100" id="post" src="\img\Hey! (1).png" >
+  </div>
+  <div class="userdata">
+    <p class="data field">Creator</p>
+    <p class="data">:</p>
+    <p class="data"><%= thispost.Username %></p>
+  </div>
+  <div class="userdata desc">
+    <p class="data field desc">Description</p>
+    <p class="data desc">:</p>
+    <p class="data desc"><%= thispost.Description %></p>
+  </div>
+</div>
+  <%- include("partials/footer") -%>
+  </body>
