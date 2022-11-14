@@ -11,7 +11,7 @@ const requireAuth = (req, res, next) => {
     if (token) {
         jwt.verify(token, SECRET_KEY, (err, decodedToken) => {
             if (err) {
-                console.log("Error occured");
+                console.log(err);
                 res.redirect("/login");
             }
             else {
@@ -20,7 +20,6 @@ const requireAuth = (req, res, next) => {
         })
     }
     else {
-        console.log("not logged in");
         res.redirect('/login');
     }
 }
@@ -48,4 +47,31 @@ const checkUser = (req, res, next) => {
     }
 }
 
-module.exports = { requireAuth, checkUser};
+
+const checkAdmin = (req, res, next) => {
+    const token = req.cookies.jwt;
+
+    if (token) {
+        jwt.verify(token, SECRET_KEY, async (err, decodedToken) => {
+            if (err) {
+                console.log(err);
+                res.send("Sorry, you're not authorized to visit this page!!");
+            }
+            else {
+                let user = await Profile.findById(decodedToken.id);
+                if(user.Username == "maheshwari"){
+                    res.locals.user = user;
+                    next();
+                }
+                else{
+                    res.send("Sorry, you're not authorized to visit this page!!");
+                }
+            }
+        })
+    }
+    else {
+        res.send("Sorry, you're not authorized to visit this page!!");
+    }
+}
+
+module.exports = { requireAuth, checkUser, checkAdmin};

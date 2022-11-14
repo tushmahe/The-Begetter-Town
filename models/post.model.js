@@ -20,6 +20,10 @@ const postSchema = mongoose.Schema({
     Category: {
         type: String,
         required: true
+    },
+
+    postPicture: {
+        type: String,
     }
 
 });
