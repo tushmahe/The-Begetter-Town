@@ -60,8 +60,7 @@ const profileSchema = mongoose.Schema({
     },
 
     ProfileImg: {
-        data: Buffer,
-        contentType: String
+        type: String
     }
 
 });

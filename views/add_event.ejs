@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Event</title>
+</head>
+<body>
+    <form action = "/add_event" enctype = "multipart/form-data" method = "POST">
+        <label>Event title: </label>
+        <input type = "text" name = "title">
+
+        <label>Event category: </label>
+        <select name = "category">
+            <option selected>Select category</option>
+            <option value="Paintings">PAINTING</option>
+            <option value="Handicraft">HANDICRAFT</option>
+            <option value="Photography">PHOTOGRAPHY</option>
+            <option value="Jwellery">JEWELLERY</option>
+            <option value="Fashion">FASHION</option>
+        </select>
+
+        <label>Choose image: </label>
+        <input type="file" name = "uploadFile"/>
+
+        <label>Description: </label>
+        <textarea name = "description"></textarea>
+
+        <label>Start Date: </label>
+        <input type = "date" name = "startDate">
+
+        <label>End Date: </label>
+        <input type = "date" name = "endDate"> 
+        
+        <button type="submit">SUBMIT</button>
+    </form>
+</body>
+</html>

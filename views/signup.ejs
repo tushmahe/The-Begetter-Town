@@ -27,7 +27,7 @@
         <h1 class="signup">Sign Up</h1>
     </div>
     <div class="form">
-        <form action = "/signup" method = "POST" id = "reg-form">
+        <form action = "/signup" enctype="multipart/form-data" method = "POST" id = "reg-form">
             <div class="form-row">
                 <div class="col-md-6 mb-2">
                     <label for="validationDefault01">First name</label>
@@ -38,13 +38,6 @@
                     <input type="text" class="form-control" id="validationDefault02" placeholder="Last name" name = "lastname" 
                         required>
                 </div>
-                <!-- <div class="col-md-6 mb-1" id="username">
-                    <label for="validationServer03" class="form-label">Username</label>
-                    <input type="text" class="form-control is-invalid" id="validationServer03" aria-describedby="validationServer03Feedback" required>
-                    <div id="validationServer03Feedback" class="invalid-feedback">
-                      This username has already been used.
-                    </div>
-                  </div> -->
                     <div class="col-md-6 mb-1" id="username">
                         <label for="validationDefaultUsername">Username</label>
                         <div class="input-group">
@@ -66,7 +59,7 @@
                     <div class="col-md-6 mb-1">
                         <label for="validationDefault02">Email</label>
                         <input type="email" class="form-control" id="validationDefault02" placeholder="abcd@gmail.com" name = "email"
-                            value="" required>
+                            required>
                     </div>
                 </div>
              <% } else{ %>
@@ -82,7 +75,7 @@
             <div class="form-row">
                 <div class="col-md-6 mb-1">
                     <label for="formFileSm" class="form-label">Upload Photo</label>
-                    <input class="form-control form-control-sm " id="formFileSm" type="file"  name = "profilepicture" /> 
+                    <input class="form-control form-control-sm " id="formFileSm" type="file"  name = "uploadFile" /> 
                 </div>
             </div>
          

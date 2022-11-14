@@ -9,11 +9,14 @@ const methodOverride = require("method-override");
 const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
-const { requireAuth, checkUser } = require('./middleware/auth');
+const { requireAuth, checkUser, checkAdmin } = require('./middleware/auth');
 const nodemailer = require('nodemailer');
+const formidable = require('formidable');
+const fileUpload = require("express-fileupload");
+
 
 const transporter = nodemailer.createTransport({
-    service:'hotmail',
+    service: 'hotmail',
     auth: {
         user: 'tushmaheshwari@outlook.com',
         pass: 'Tushmahe@123'
@@ -32,6 +35,7 @@ app.use(express.static(__dirname + "/public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(fileUpload());
 
 const conn = mongoose.connect("mongodb://localhost:27017/theBegetterTownDB", {
     useNewUrlParser: true,
@@ -43,29 +47,109 @@ const conn = mongoose.connect("mongodb://localhost:27017/theBegetterTownDB", {
 const Profile = require("./models/profile.model");
 const Post = require("./models/post.model");
 const { profileEnd } = require("console");
+const Event = require("./models/event.model");
 
-const ProfileStorage = multer.diskStorage({
-    dest: function (req, file, cb) {
-        cb(null, 'profilePictures/')
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now + file.originalname);
+var pastEvents = [];
+var liveEvents = [];
+var upcomingEvents = [];
+
+async function getEvents(){
+    pastEvents = [];
+    liveEvents = [];
+    upcomingEvents = [];
+    const date = new Date();
+
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+
+    if(day < 10){
+        day = "0" + day.toString();
     }
-});
+    else{
+        day = day.toString();
+    }
 
-const profilepic = multer({
-    storage: ProfileStorage
-});
+    if(month < 10){
+        month = "0" + month.toString();
+    }
+    else{
+        month = month.toString();
+    }
 
+    // console.log(day);
+
+    year = year.toString();
+
+    const allevents = await Event.find({});
+
+    // var pastEvents = [];
+    // var liveEvents = [];
+    // var upcomingEvents = [];
+
+    for(var i = 0; i < allevents.length; i++){
+        if(allevents[i].startDate.substr(0, 4) < year){
+            Event.findOneAndRemove({Title: allevents[i].Title});
+        }
+
+        else if(allevents[i].startDate.substr(0, 4) == year){
+            // console.log(allevents[i].startDate.substr(5, 2))
+            if(allevents[i].startDate.substr(5, 2) > month){
+                // console.log("this");
+                upcomingEvents[upcomingEvents.length] = allevents[i];
+            }
+            else if(allevents[i].startDate.substr(5, 2) < month){
+                // console.log("this");
+                pastEvents[pastEvents.length] = allevents[i];
+            }
+            else{
+                if(allevents[i].startDate.substr(8, 2) <= day){
+                    // console.log(allevents[i].endDate.substr(8, 2));
+                    if(allevents[i].endDate.substr(8, 2) >= day){
+                        liveEvents[liveEvents.length] = allevents[i];
+                    }
+                    else{
+                        pastEvents[pastEvents.length] = allevents[i];
+                    }
+                } 
+                else{
+                    upcomingEvents[upcomingEvents.length] = allevents[i];
+                }
+            }
+        }
+        else{
+            upcomingEvents[upcomingEvents.length] = allevents[i];
+        }
+    }
+
+    // const events = [pastEvents, liveEvents, upcomingEvents];
+    // var events = [];
+    // events[0] = pastEvents;
+    // events[1] = liveEvents;
+    // events[2] = upcomingEvents;
+
+    // console.log(events);
+
+    // return events;
+    console.log(upcomingEvents);
+    return;
+}
 
 app.get("*", checkUser);
 app.post("*", checkUser);
 
 app.get("/", async function (req, res) {
+    // const allevents = getEvents();
+    getEvents();
+    // console.log(allevents);
+
     const all = await Post.find({});
 
-    console.log(all);
-    res.render("index", allPosts = all);
+    // console.log(allevents);
+
+    // upcomingevents = allevents[2];
+    // console.log(allevents[1].length);
+    res.render("index", {allPosts: all, upcoming: upcomingEvents});
 });
 
 app.get("/login", function (req, res) {
@@ -81,8 +165,15 @@ app.get("/signup", function (req, res) {
     res.render("signup");
 });
 
-app.get("/events", function (req, res) {
-    res.render("events");
+app.get("/events", async function (req, res) {
+    
+    await getEvents();
+    console.log(upcomingEvents);
+
+    res.render("events", {past: pastEvents, live: liveEvents, upcoming: upcomingEvents});
+});
+app.get("/ideas", function (req, res) {
+    res.render("ideas");
 });
 
 
@@ -91,55 +182,14 @@ app.get("/contactUs", function (req, res) {
 });
 
 app.get("/post_details/:postTitle", async function (req, res) {
-    const post = await Post.findOne({Title: req.params.postTitle});
+    const post = await Post.findOne({ Title: req.params.postTitle });
 
     res.render("post_details", thispost = post);
 });
 
 
-app.get("/myprofile/:username", requireAuth, async function (req, res) {
-    var linkcreator = await Profile.findOne({Username: req.params.username});
-    console.log(linkcreator)
-
-    res.render("dashboard", otheruser=linkcreator);
-});
-
-
-app.get("/contact_info/:username", requireAuth,  async function (req, res) {
-    
-    // console.log(req.params.username)
-    var linkcreator = await Profile.findOne({Username: req.params.username});
-    // console.log(linkcreator)
-    
-        //   let user = await Profile.findById(decodedToken.id);
-            res.render("contact_info",otheruser=linkcreator);
-        
-    
-});
-
-
-app.get("/mypost/:username", requireAuth, async function(req, res) {
-    const token = req.cookies.jwt;
-    console.log(req.params.username)
-    jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
-        if (err) {
-            console.log(err);
-            // res.redirect("/login");
-        }
-        else{
-            let user = await Profile.findById(decodedToken.id);
-            let all = await Post.find({Username:req.params.username});
-            let alluser = await Post.find({Username:otheruser.Username});
-            var linkcreator = await Profile.findOne({Username: req.params.username});
-            console.log(all);
-            // console.log(alluser);
-            // console.log(linkcreator)
-            res.render("mypost",allPosts = all,otheruser=null,postother=alluser);
-        }
-    })
-  
-   
-   
+app.get("/myprofile", requireAuth, function (req, res) {
+    res.render("dashboard", otheruser = null);
 });
 
 
@@ -149,7 +199,7 @@ app.get("/add_post", requireAuth, function (req, res) {
 });
 
 
-app.post("/signup", profilepic.single("profilepicture"), async (req, res) => {
+app.post("/signup", async (req, res) => {
     var TypeOfUser;
     if (req.body.creator == 1) {
         TypeOfUser = "Creator";
@@ -159,6 +209,29 @@ app.post("/signup", profilepic.single("profilepicture"), async (req, res) => {
     }
 
     const password = await bcrypt.hash(req.body.password, 10);
+
+    var filename;
+
+    if (req.files && Object.keys(req.files).length !== 0) {
+
+        // Uploaded path
+        uploadedFile = req.files.uploadFile;
+        filename = Date.now() + uploadedFile.name;
+
+        // Logging uploading file
+        // console.log(uploadedFile);
+
+        // Upload path
+        const uploadPath = __dirname
+            + "/public/img/profilePic/" + filename;
+
+        // To save the file using mv() function
+        uploadedFile.mv(uploadPath);
+    }
+    else {
+        res.send("No file uploaded !!");
+    }
+
 
 
     try {
@@ -176,10 +249,7 @@ app.post("/signup", profilepic.single("profilepicture"), async (req, res) => {
             BusinessEmail: req.body.businessemail,
             Address: req.body.city + ", " + req.body.state + ", Zip Code: " + req.body.zip,
             Bio: req.body.bio,
-            ProfileImg: {
-                data: req.file,
-                contentType: "image/png"
-            }
+            ProfileImg: filename
         });
 
         const token = jwt.sign(
@@ -193,7 +263,20 @@ app.post("/signup", profilepic.single("profilepicture"), async (req, res) => {
         return res.cookie({ "token": token }).redirect("/login");
     } catch (error) {
         if (error.code === 11000) {
-          
+            // const username = await Profile.findOne({ Username : req.body.username });
+            // if(username!=null){
+            //     app.get('/', function(req, res) {
+            //         res.render('signup', { username: username});
+            //     });
+            // }
+            // const email = await Profile.findOne({Email: req.body.email});
+            // if(email){
+                
+            // }
+            // const phoneno = await Profile.findOne({PhoneNumber: req.body.phonenumber});
+            // if(phoneno){
+                
+            // }
             res.send("Please make sure your username, e-mail ID and phone number are unique");
             // res.redirect("signup");
         }
@@ -202,18 +285,18 @@ app.post("/signup", profilepic.single("profilepicture"), async (req, res) => {
 
 app.post("/contactUs", async (req, res) => {
 
-    try{
+    try {
 
-    const msg = await ContactUs.create({
-        Name: req.body.firstname + " " + req.body.lastname,
-        Email: req.body.email,
-        Message: req.body.message
-    });
+        const msg = await ContactUs.create({
+            Name: req.body.firstname + " " + req.body.lastname,
+            Email: req.body.email,
+            Message: req.body.message
+        });
 
-    // user.save().then(() => res.send("Successfully Uploaded"));
-}catch(error){
-    res.status(400).send("Error occured");
-}
+        // user.save().then(() => res.send("Successfully Uploaded"));
+    } catch (error) {
+        res.status(400).send("Error occured");
+    }
 
     res.redirect("/")
 });
@@ -238,15 +321,10 @@ app.post("/login", async (req, res) => {
             );
 
             res.cookie('jwt', token, { maxAge: 100000000000 });
-            // const all = await Post.find({});
-            // res.render("index", allPosts = all);
-            // res.render("index.ejs");
-            // return res.redirect("/").redirect("/index")
-            // res.render("index.ejs");
 
             console.log("Logged in successfully");
 
-            res.redirect("/");
+            // res.redirect("http://localhost:3000");
         }
         else {
             res.send("Incorrect Password");
@@ -260,8 +338,27 @@ app.post("/login", async (req, res) => {
 });
 
 
+app.get("/mypost", requireAuth, async function(req, res) {
+    const token = req.cookies.jwt;
 
+    jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
+        if (err) {
+            console.log(err);
+            // res.redirect("/login");
+        }
+        else{
+            let user = await Profile.findById(decodedToken.id);
+            const all = await Post.find({Username:user.Username});
 
+            // console.log(all);
+        
+            res.render("mypost",allPosts = all);
+        }
+    })
+  
+   
+   
+});
 
 app.get("/logout", (req, res) => {
     res.cookie('jwt', "", { maxAge: 1 });
@@ -269,6 +366,9 @@ app.get("/logout", (req, res) => {
 });
 
 app.post("/add_post", (req, res) => {
+
+    // console.log(req.body.title);
+
     const token = req.cookies.jwt;
 
     jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
@@ -279,27 +379,27 @@ app.post("/add_post", (req, res) => {
         else {
             let user = await Profile.findById(decodedToken.id);
             // console.log("***********************************")
-            //  console.log(user)
+             console.log(user)
             //  console.log("***********************************")
             const newPost = await Post.create({
                 Username: user.Username,
                 Title: req.body.title,
                 Description: req.body.description,
-                Category: user.FieldOfInterest
+                Category: user.FieldOfInterest,
+                postPicture: filename
             });
 
         }
-    })
+    });
 
     res.redirect("/");
 });
 
 app.post("/deletePost", async (req, res) => {
-    // console.log(req.body.title);
 
     const thispost = await Post.findOne({Title: req.body.title});
 
-    // console.log(thispost);
+    console.log(thispost);
 
     Post.findOneAndRemove({Title: req.body.title}, () => {
         res.redirect("/mypost");
@@ -307,11 +407,50 @@ app.post("/deletePost", async (req, res) => {
 });
 
 app.get("/profile/:username", async (req, res) =>{
-    console.log(req.params.username);
+    // console.log(req.params.username);
     var creator = await Profile.findOne({Username: req.params.username});
-
     res.render("dashboard", otheruser = creator);
 });
+
+app.get("/add_event", async (req, res) => {
+    res.render("add_event");
+});
+
+app.post("/add_event", async (req, res) => {
+    var filename;
+
+    if (req.files && Object.keys(req.files).length !== 0) {
+
+        // Uploaded path
+        uploadedFile = req.files.uploadFile;
+        filename = Date.now() + uploadedFile.name;
+
+        // Logging uploading file
+        // console.log(uploadedFile);
+
+        // Upload path
+        const uploadPath = __dirname
+            + "/public/img/eventPic/" + filename;
+
+        // To save the file using mv() function
+        uploadedFile.mv(uploadPath);
+    }
+    else {
+        res.send("No file uploaded !!");
+    }
+
+    const newEvent = await Event.create({
+        Title: req.body.title,
+        Description: req.body.description,
+        Category: req.body.category,
+        eventPic: filename,
+        startDate: req.body.startDate,
+        endDate: req.body.endDate
+    });
+
+
+    res.redirect("/");
+})
 
 app.listen(3000, function () {
     console.log("Server started on port 3000");
