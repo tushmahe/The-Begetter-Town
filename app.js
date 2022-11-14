@@ -172,7 +172,9 @@ app.get("/events", async function (req, res) {
 
     res.render("events", {past: pastEvents, live: liveEvents, upcoming: upcomingEvents});
 });
-
+app.get("/ideas", function (req, res) {
+    res.render("ideas");
+});
 app.get("/contactUs", function (req, res) {
     res.render("contactUs");
 });
@@ -329,7 +331,7 @@ app.post("/login", async (req, res) => {
 
             console.log("Logged in successfully");
 
-            res.redirect("/");
+            // res.redirect("http://localhost:3000");
         }
         else {
             res.send("Incorrect Password");

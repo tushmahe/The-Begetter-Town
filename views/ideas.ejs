@@ -1,0 +1,77 @@
+<%- include("partials/boiler") -%>
+  <link rel="stylesheet" href="css/ideas.css">
+  <%- include("partials/header") -%>
+    <div class = "ideas-container">
+        <span class = "container-heading">IDEAS</span>
+        <div class = "main-container">
+            <div class = "left-container">
+                <div class = "containers">
+                    <p class = "text-content">
+                        Bla Bla 
+                        <a href = ""id ="pop">...READ MORE</a>
+                    </p>
+                    <h6>Created by someone</h6>
+                </div>
+            </div>
+            <div class = "brdr-container"></div>
+            <div class = "fltr-container">
+                <ul type = "none" class = "filter-list">
+                    <li class = "filter-list-items">
+                        <span class ="filter-heading">FILTERS</span>
+                    </li>
+                    <li class = "filter-list-items">
+                        <input type = "checkbox">
+                        <span>PAINTINGS</span>
+                    </li>
+                    <li class = "filter-list-items">
+                        <input type = "checkbox">
+                        <span>PHOTOGRAPHY</span>
+                    </li>
+                    <li class = "filter-list-items">
+                        <input type = "checkbox">
+                        <span>JEWELLERY</span>
+                    </li>
+                    <li class = "filter-list-items">
+                        <input type = "checkbox">
+                        <span>HANDICRAFT</span>
+                    </li>
+                    <li class = "filter-list-items">
+                        <input type = "checkbox">
+                        <span>FASHION DESIGNING</span>
+                    </li>
+                    <li class = "filter-list-items">
+                        <input type = "checkbox">
+                        <span>OTHERS</span>
+                    </li>
+                </ul>
+                <button class = "add-post" onclick="openForm()">ADD IDEA</button>
+            </div>
+        </div>
+    </div> 
+
+<div class="form-popup" id="myForm">
+  <form action="/action_page.php" class="form-container">
+    <h1>POST</h1>  
+
+    <label for="title"><b>Title</b></label>
+    <input type="text" placeholder="Add Title" name="title" required>
+
+    <label for="desc"><b>Description</b></label>
+    <textarea name="desc" id="" cols="30" rows="10" placeholder="Add Description" required></textarea>
+
+    <label for="category">Category Type</label>
+    <select name="category">
+        <option value="volvo">PAINTINGS</option>
+        <option value="saab">PHOTOGRAPHY</option>
+        <option value="opel">JEWELLERY</option>
+        <option value="opel">HANDICRAFT</option>
+        <option value="audi">FASHION DESIGNING</option>
+        <option value="audi">OTHERS</option>
+    </select>
+
+    <button type="submit" class="btn">POST</button>
+    <button type="button" class="btn cancel" onclick="closeForm()">✘</button>
+  </form>
+</div>
+    <%- include("partials/footer") -%>
+    <script src="script\ideas.js"></script>
