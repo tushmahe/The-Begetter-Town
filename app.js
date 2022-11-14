@@ -226,7 +226,7 @@ app.post("/login", async (req, res) => {
 
             console.log("Logged in successfully");
 
-            res.redirect("/");
+            // res.redirect("http://localhost:3000");
         }
         else {
             res.send("Incorrect Password");
