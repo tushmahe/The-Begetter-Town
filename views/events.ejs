@@ -1,39 +1,19 @@
 <%- include("partials/boiler") -%>
-  <link rel="stylesheet" href="css/eventstyles.css">
+  <link rel="stylesheet" href="/css/eventstyles.css">
   <%- include("partials/header") -%>
 
   <div class="event">
     <p class="eventtype"><u>LIVE EVENTS</u></p>
     <div style="overflow-y: scroll;" class="eventcards">
     <div class="events">
+      <% for(var i = 0; i < live.length; i++){ %>
       <div class="card">
-        <img class="card-img-top" src="img/Artcalender.png" alt="Card image cap">
+        <img class="card-img-top" src="/img/eventPic/<%= live[i].eventPic %>" alt="Card image cap">
         <div class="card-body mb-4">
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-            content.<br><a href="#">Read more</a></p>
+          <p class="card-text"><%= live[i].Description %><br><a href="#">Read more</a></p>
         </div>
       </div>
-      <div class="card">
-        <img class="card-img-top" src="img/Artcalender.png" alt="Card image cap">
-        <div class="card-body mb-4">
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-            content.<br><a href="#">Read more</a></p>
-        </div>
-      </div>
-      <div class="card">
-        <img class="card-img-top" src="img/Artcalender.png" alt="Card image cap">
-        <div class="card-body mb-4">
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-            content.<br><a href="#">Read more</a></p>
-        </div>
-      </div>
-      <div class="card">
-        <img class="card-img-top" src="img/Artcalender.png" alt="Card image cap">
-        <div class="card-body mb-4">
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-            content.<br><a href="#">Read more</a></p>
-        </div>
-      </div>
+      <% } %>
     </div>
   </div>
 </div>
@@ -42,34 +22,14 @@
       <p class="eventtype"><u>UPCOMING EVENTS</u></p>
       <div style="overflow-y: scroll;" class="eventcards">
       <div class="events">
-        <div class="card">
-          <img class="card-img-top" src="img/Artcalender.png" alt="Card image cap">
-          <div class="card-body mb-4">
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-              content.<br><a href="#">Read more</a></p>
+        <% for(var i = 0; i < upcoming.length; i++){ %>
+          <div class="card">
+            <img class="card-img-top" src="/img/eventPic/<%= upcoming[i].eventPic %>" alt="Card image cap">
+            <div class="card-body mb-4">
+              <p class="card-text"><%= upcoming[i].Description %><br><a href="#">Read more</a></p>
+            </div>
           </div>
-        </div>
-        <div class="card">
-          <img class="card-img-top" src="img/Artcalender.png" alt="Card image cap">
-          <div class="card-body mb-4">
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-              content.<br><a href="#">Read more</a></p>
-          </div>
-        </div>
-        <div class="card">
-          <img class="card-img-top" src="img/Artcalender.png" alt="Card image cap">
-          <div class="card-body mb-4">
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-              content.<br><a href="#">Read more</a></p>
-          </div>
-        </div>
-        <div class="card">
-          <img class="card-img-top" src="img/Artcalender.png" alt="Card image cap">
-          <div class="card-body mb-4">
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-              content.<br><a href="#">Read more</a></p>
-          </div>
-        </div>
+          <% } %>
       </div>
     </div>
   </div>
@@ -79,34 +39,14 @@
     <p class="eventtype"><u>PAST EVENTS</u></p>
     <div style="overflow-y: scroll;" class="eventcards">
     <div class="events">
-      <div class="card">
-        <img class="card-img-top" src="img/Artcalender.png" alt="Card image cap">
-        <div class="card-body mb-4">
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-            content.<br><a href="#">Read more</a></p>
+      <% for(var i = 0; i < past.length; i++){ %>
+        <div class="card">
+          <img class="card-img-top" src="/img/eventPic/<%= past[i].eventPic %>" alt="Card image cap">
+          <div class="card-body mb-4">
+            <p class="card-text"><%= past[i].Description %><br><a href="#">Read more</a></p>
+          </div>
         </div>
-      </div>
-      <div class="card">
-        <img class="card-img-top" src="img/Artcalender.png" alt="Card image cap">
-        <div class="card-body mb-4">
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-            content.<br><a href="#">Read more</a></p>
-        </div>
-      </div>
-      <div class="card">
-        <img class="card-img-top" src="img/Artcalender.png" alt="Card image cap">
-        <div class="card-body mb-4">
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-            content.<br><a href="#">Read more</a></p>
-        </div>
-      </div>
-      <div class="card">
-        <img class="card-img-top" src="img/Artcalender.png" alt="Card image cap">
-        <div class="card-body mb-4">
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-            content.<br><a href="#">Read more</a></p>
-        </div>
-      </div>
+        <% } %>
     </div>
   </div>
 </div>
