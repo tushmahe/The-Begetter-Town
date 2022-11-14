@@ -76,6 +76,9 @@ app.get("/signup", function (req, res) {
 app.get("/events", function (req, res) {
     res.render("events");
 });
+app.get("/ideas", function (req, res) {
+    res.render("ideas");
+});
 app.get("/contactUs", function (req, res) {
     res.render("contactUs");
 });
