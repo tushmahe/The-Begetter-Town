@@ -84,6 +84,8 @@ app.get("/signup", function (req, res) {
 app.get("/events", function (req, res) {
     res.render("events");
 });
+
+
 app.get("/contactUs", function (req, res) {
     res.render("contactUs");
 });
@@ -95,8 +97,49 @@ app.get("/post_details/:postTitle", async function (req, res) {
 });
 
 
-app.get("/myprofile", requireAuth, function (req, res) {
-    res.render("dashboard", otheruser = null);
+app.get("/myprofile/:username", requireAuth, async function (req, res) {
+    var linkcreator = await Profile.findOne({Username: req.params.username});
+    console.log(linkcreator)
+
+    res.render("dashboard", otheruser=linkcreator);
+});
+
+
+app.get("/contact_info/:username", requireAuth,  async function (req, res) {
+    
+    // console.log(req.params.username)
+    var linkcreator = await Profile.findOne({Username: req.params.username});
+    // console.log(linkcreator)
+    
+        //   let user = await Profile.findById(decodedToken.id);
+            res.render("contact_info",otheruser=linkcreator);
+        
+    
+});
+
+
+app.get("/mypost/:username", requireAuth, async function(req, res) {
+    const token = req.cookies.jwt;
+    console.log(req.params.username)
+    jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
+        if (err) {
+            console.log(err);
+            // res.redirect("/login");
+        }
+        else{
+            let user = await Profile.findById(decodedToken.id);
+            let all = await Post.find({Username:req.params.username});
+            let alluser = await Post.find({Username:otheruser.Username});
+            var linkcreator = await Profile.findOne({Username: req.params.username});
+            console.log(all);
+            // console.log(alluser);
+            // console.log(linkcreator)
+            res.render("mypost",allPosts = all,otheruser=null,postother=alluser);
+        }
+    })
+  
+   
+   
 });
 
 
@@ -126,6 +169,7 @@ app.post("/signup", profilepic.single("profilepicture"), async (req, res) => {
             Email: req.body.email,
             Password: password,
             Country: req.body.country,
+            CountryCode:req.body.countryCode,
             PhoneNumber: req.body.phonenumber,
             FieldOfInterest: req.body.fieldofinterest,
             TypeOfUser: TypeOfUser,
@@ -149,20 +193,7 @@ app.post("/signup", profilepic.single("profilepicture"), async (req, res) => {
         return res.cookie({ "token": token }).redirect("/login");
     } catch (error) {
         if (error.code === 11000) {
-            // const username = await Profile.findOne({ Username : req.body.username });
-            // if(username!=null){
-            //     app.get('/', function(req, res) {
-            //         res.render('signup', { username: username});
-            //     });
-            // }
-            // const email = await Profile.findOne({Email: req.body.email});
-            // if(email){
-                
-            // }
-            // const phoneno = await Profile.findOne({PhoneNumber: req.body.phonenumber});
-            // if(phoneno){
-                
-            // }
+          
             res.send("Please make sure your username, e-mail ID and phone number are unique");
             // res.redirect("signup");
         }
@@ -192,7 +223,7 @@ app.post("/login", async (req, res) => {
     const password = req.body.password;
     const user = await Profile.findOne({ Username: username });
 
-    console.log(user);
+    // console.log(user);
 
     if (user) {
 
@@ -229,27 +260,8 @@ app.post("/login", async (req, res) => {
 });
 
 
-app.get("/mypost", requireAuth, async function(req, res) {
-    const token = req.cookies.jwt;
 
-    jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
-        if (err) {
-            console.log(err);
-            // res.redirect("/login");
-        }
-        else{
-            let user = await Profile.findById(decodedToken.id);
-            const all = await Post.find({Username:user.Username});
 
-            // console.log(all);
-        
-            res.render("mypost",allPosts = all);
-        }
-    })
-  
-   
-   
-});
 
 app.get("/logout", (req, res) => {
     res.cookie('jwt', "", { maxAge: 1 });
@@ -267,7 +279,7 @@ app.post("/add_post", (req, res) => {
         else {
             let user = await Profile.findById(decodedToken.id);
             // console.log("***********************************")
-             console.log(user)
+            //  console.log(user)
             //  console.log("***********************************")
             const newPost = await Post.create({
                 Username: user.Username,
@@ -287,7 +299,7 @@ app.post("/deletePost", async (req, res) => {
 
     const thispost = await Post.findOne({Title: req.body.title});
 
-    console.log(thispost);
+    // console.log(thispost);
 
     Post.findOneAndRemove({Title: req.body.title}, () => {
         res.redirect("/mypost");
@@ -295,8 +307,9 @@ app.post("/deletePost", async (req, res) => {
 });
 
 app.get("/profile/:username", async (req, res) =>{
-    // console.log(req.params.username);
+    console.log(req.params.username);
     var creator = await Profile.findOne({Username: req.params.username});
+
     res.render("dashboard", otheruser = creator);
 });
 

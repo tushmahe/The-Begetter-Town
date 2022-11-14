@@ -27,6 +27,11 @@ const profileSchema = mongoose.Schema({
     Country: {
         type: String
     },
+    
+    CountryCode: {
+        type: String
+    },
+
 
     PhoneNumber: {
         type: String,
