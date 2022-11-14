@@ -139,16 +139,10 @@ app.get("*", checkUser);
 app.post("*", checkUser);
 
 app.get("/", async function (req, res) {
-    // const allevents = getEvents();
     getEvents();
-    // console.log(allevents);
 
     const all = await Post.find({});
 
-    // console.log(allevents);
-
-    // upcomingevents = allevents[2];
-    // console.log(allevents[1].length);
     res.render("index", {allPosts: all, upcoming: upcomingEvents});
 });
 
@@ -328,8 +322,9 @@ app.post("/login", async (req, res) => {
             );
 
             res.cookie('jwt', token, { maxAge: 100000000000 });
-
             console.log("Logged in successfully");
+
+            res.redirect("/");
 
             // res.redirect("http://localhost:3000");
         }
