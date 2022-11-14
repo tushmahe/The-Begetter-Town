@@ -15,6 +15,18 @@ const eventSchema = mongoose.Schema({
     Category: {
         type: String,
         required: true
+    },
+
+    eventPic: {
+        type: String
+    },
+
+    startDate: {
+        type: String
+    },
+
+    endDate: {
+        type: String
     }
 
 });

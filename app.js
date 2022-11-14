@@ -50,14 +50,107 @@ const { profileEnd } = require("console");
 const Event = require("./models/event.model");
 const Ideas = require("./models/ideas.model");
 
+var pastEvents = [];
+var liveEvents = [];
+var upcomingEvents = [];
+
+async function getEvents(){
+    pastEvents = [];
+    liveEvents = [];
+    upcomingEvents = [];
+    const date = new Date();
+
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+
+    if(day < 10){
+        day = "0" + day.toString();
+    }
+    else{
+        day = day.toString();
+    }
+
+    if(month < 10){
+        month = "0" + month.toString();
+    }
+    else{
+        month = month.toString();
+    }
+
+    // console.log(day);
+
+    year = year.toString();
+
+    const allevents = await Event.find({});
+
+    // var pastEvents = [];
+    // var liveEvents = [];
+    // var upcomingEvents = [];
+
+    for(var i = 0; i < allevents.length; i++){
+        if(allevents[i].startDate.substr(0, 4) < year){
+            Event.findOneAndRemove({Title: allevents[i].Title});
+        }
+
+        else if(allevents[i].startDate.substr(0, 4) == year){
+            // console.log(allevents[i].startDate.substr(5, 2))
+            if(allevents[i].startDate.substr(5, 2) > month){
+                // console.log("this");
+                upcomingEvents[upcomingEvents.length] = allevents[i];
+            }
+            else if(allevents[i].startDate.substr(5, 2) < month){
+                // console.log("this");
+                pastEvents[pastEvents.length] = allevents[i];
+            }
+            else{
+                if(allevents[i].startDate.substr(8, 2) <= day){
+                    // console.log(allevents[i].endDate.substr(8, 2));
+                    if(allevents[i].endDate.substr(8, 2) >= day){
+                        liveEvents[liveEvents.length] = allevents[i];
+                    }
+                    else{
+                        pastEvents[pastEvents.length] = allevents[i];
+                    }
+                } 
+                else{
+                    upcomingEvents[upcomingEvents.length] = allevents[i];
+                }
+            }
+        }
+        else{
+            upcomingEvents[upcomingEvents.length] = allevents[i];
+        }
+    }
+
+    // const events = [pastEvents, liveEvents, upcomingEvents];
+    // var events = [];
+    // events[0] = pastEvents;
+    // events[1] = liveEvents;
+    // events[2] = upcomingEvents;
+
+    // console.log(events);
+
+    // return events;
+    console.log(upcomingEvents);
+    return;
+}
+
 app.get("*", checkUser);
 app.post("*", checkUser);
 
 app.get("/", async function (req, res) {
+    // const allevents = getEvents();
+    getEvents();
+    // console.log(allevents);
+
     const all = await Post.find({});
 
-    console.log(all);
-    res.render("index", allPosts = all);
+    // console.log(allevents);
+
+    // upcomingevents = allevents[2];
+    // console.log(allevents[1].length);
+    res.render("index", {allPosts: all, upcoming: upcomingEvents});
 });
 
 app.get("/login", function (req, res) {
@@ -73,8 +166,12 @@ app.get("/signup", function (req, res) {
     res.render("signup");
 });
 
-app.get("/events", function (req, res) {
-    res.render("events");
+app.get("/events", async function (req, res) {
+    
+    await getEvents();
+    console.log(upcomingEvents);
+
+    res.render("events", {past: pastEvents, live: liveEvents, upcoming: upcomingEvents});
 });
 app.get("/ideas", function (req, res) {
     res.render("ideas");
@@ -84,15 +181,24 @@ app.get("/contactUs", function (req, res) {
 });
 
 app.get("/post_details/:postTitle", async function (req, res) {
-    const post = await Post.findOne({Title: req.params.postTitle});
+    const post = await Post.findOne({ Title: req.params.postTitle });
 
     res.render("post_details", thispost = post);
 });
 
 app.get("/explore_by_category/:category", async function (req, res) {
-    const cate = await Post.find({Category: req.params.category});
-    res.render("categories", {postcategory: req.params.category, posts:cate});
+
+    const cate = await Post.find({ Category: req.params.category });
+
+    var categoryEvents = [];
+    for(var i = 0; i < upcomingEvents.length; i++){
+        if(upcomingEvents[i].Category == req.params.category){
+            categoryEvents[categoryEvents.length] = upcomingEvents[i];
+        }
+    }
+    res.render("categories", { upcoming: categoryEvents, postcategory: req.params.category, posts: cate });
 });
+
 app.get("/myprofile", requireAuth, function (req, res) {
     res.render("dashboard", otheruser = null);
 });
@@ -299,7 +405,7 @@ app.get("/logout", (req, res) => {
 
 app.post("/add_post", (req, res) => {
 
-    console.log(req.body.title);
+    // console.log(req.body.title);
 
     const token = req.cookies.jwt;
 
@@ -348,22 +454,57 @@ app.post("/add_post", (req, res) => {
 });
 
 app.post("/deletePost", async (req, res) => {
-    // console.log(req.body.title);
-
-    const thispost = await Post.findOne({ Title: req.body.title });
-
-    console.log(thispost);
 
     Post.findOneAndRemove({ Title: req.body.title }, () => {
         res.redirect("/mypost");
     });
 });
 
-app.get("/profile/:username", async (req, res) =>{
+app.get("/profile/:username", async (req, res) => {
     // console.log(req.params.username);
-    var creator = await Profile.findOne({Username: req.params.username});
+    var creator = await Profile.findOne({ Username: req.params.username });
     res.render("dashboard", otheruser = creator);
 });
+
+app.get("/add_event", async (req, res) => {
+    res.render("add_event");
+});
+
+app.post("/add_event", async (req, res) => {
+    var filename;
+
+    if (req.files && Object.keys(req.files).length !== 0) {
+
+        // Uploaded path
+        uploadedFile = req.files.uploadFile;
+        filename = Date.now() + uploadedFile.name;
+
+        // Logging uploading file
+        // console.log(uploadedFile);
+
+        // Upload path
+        const uploadPath = __dirname
+            + "/public/img/eventPic/" + filename;
+
+        // To save the file using mv() function
+        uploadedFile.mv(uploadPath);
+    }
+    else {
+        res.send("No file uploaded !!");
+    }
+
+    const newEvent = await Event.create({
+        Title: req.body.title,
+        Description: req.body.description,
+        Category: req.body.category,
+        eventPic: filename,
+        startDate: req.body.startDate,
+        endDate: req.body.endDate
+    });
+
+
+    res.redirect("/");
+})
 
 app.listen(3000, function () {
     console.log("Server started on port 3000");
