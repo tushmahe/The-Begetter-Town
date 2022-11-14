@@ -5,7 +5,13 @@
     <%- include("partials/sidebar") -%>
 
       <% if(!otheruser) { %>
-        <div class="myprofile">
+      <div style="display:flex; justify-content:space-around;">
+      <div>
+      <img src="img/profilePic/<%= user.ProfileImg %>" class="rounded-circle" style="width: 200px; position: relative; left:40rem;;"
+  alt="Avatar" />
+</div>
+       
+  <div class="myprofile" style="position:absolute; right:25rem;">
           <div class="userdata">
             <p class="data field">Name</p>
             <p class="data">:</p>

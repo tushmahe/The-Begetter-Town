@@ -2,11 +2,11 @@
   <link rel="stylesheet" href="css/add_post.css">
   <link rel="stylesheet" href="css/sidebarstyles.css">
   <%- include("partials/header") -%>
-<%- include("partials/sidebar") -%>
+    <%- include("partials/sidebar") -%>
 
 
 
-<form class="data" action = "/add_post" method = "POST">
+      <form class="data" action = "/add_post" enctype="multipart/form-data" method = "POST">
     <div class="form-group postfield">
       <label for="exampleFormControlInput1" class="postdata">Post Title</label>
       <input type="text" class="form-control dataplace" id="exampleFormControlInput1" name = "title">
@@ -14,7 +14,7 @@
 
 
     <label for="formFileLg" class="form-label postdata">Choose image</label>
-<input class="form-control form-control-lg upfile" id="formFileLg" type="file" name = "image"/>
+<input class="form-control form-control-lg upfile" id="formFileLg" type="file" name = "uploadFile"/>
  
  
     <div class="form-group postfield">
@@ -22,10 +22,13 @@
       <textarea class="form-control desc dataplace" id="exampleFormControlTextarea1" minlength = "100" rows="5" name = "description"></textarea>
     </div>
 
-    <button class="addme">Add Post</button>
+    <button class="addme" type = 'submit'>Add Post</button>
   </form>
 
+      <!-- <form action="/upload" enctype="multipart/form-data" method="post">
+        <input type="file" name="uploadFile">
+        <button type="submit">Upload</button>
+      </form> -->
 
-    
-  </body>
-  
+
+      </body>
