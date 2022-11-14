@@ -1,5 +1,7 @@
 <%- include("partials/boiler") -%>
   <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/cardstyle.css">
+
   <%- include("partials/header") -%>
 
     <div class="cara">
@@ -35,11 +37,11 @@
     <div class="cards">
       <% for(var i = 0; i < allPosts.length; i++){ %>
       <div class="card">
-        <img class="card-img-top" src="/img/Artcalender.png" alt="Card image cap">
-        <div class="card-body mb-4">
-          <p><%= allPosts[i].Title %></p>
-          <p class="card-text"><%=allPosts[i].Description.substring(0, 90)%><br><a href="/post_details/<%= allPosts[i].Title %>">Read more</a></p>
-           <p>Created By: <a href="/profile/<%= allPosts[i].Username %>" style="color:blue;"><%= allPosts[i].Username %></a></p>
+        <img class="card-img-top" src="img/postPic/<%= allPosts[i].postPicture %>" alt="Card image cap">
+        <div class="card-body mb-4 card_content">
+          <h3 class="card_title"><%= allPosts[i].Title %></h3>
+          <span class="card_subtitle">Created By: <a href="/profile/<%= allPosts[i].Username %>" style="color:blue;"><%= allPosts[i].Username %></a></span>
+          <p class="card-text card_description"><%=allPosts[i].Description.substring(0, 90)%><br><a href="/post_details/<%= allPosts[i].Title %>">Read more</a></p>
         </div>
       </div>
       <% } %>
