@@ -56,7 +56,7 @@ body{
 }
 .containers{
     width : inherit;
-    height : 11vh;
+    height : 5rem;
     border-bottom : 3px solid black;
     display : flex;
     flex-direction : column;

@@ -60,6 +60,13 @@ app.get("/", async function (req, res) {
     res.render("index", allPosts = all);
 });
 
+app.get("/ideas", async function (req, res) {
+    const all = await Ideas.find({});
+
+    console.log(all);
+    res.render("ideas", allIdeas = all);
+});
+
 app.get("/login", function (req, res) {
     res.render("login");
 });;
