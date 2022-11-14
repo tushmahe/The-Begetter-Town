@@ -147,6 +147,13 @@ app.get("/", async function (req, res) {
     res.render("index", {allPosts: all, upcoming: upcomingEvents});
 });
 
+app.get("/ideas", async function (req, res) {
+    const all = await Ideas.find({});
+
+    console.log(all);
+    res.render("ideas", allIdeas = all);
+});
+
 app.get("/login", function (req, res) {
     res.render("login");
 });;
@@ -316,18 +323,27 @@ app.post("/addIdeas", async (req, res) => {
     var yyyy = today.getFullYear();
 
 today = mm + '/' + dd + '/' + yyyy;
-    try {
 
-        const user = await Profile.create({
-            Username: req.body.username,
+const token = req.cookies.jwt;
+
+    jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
+        if (err) {
+            console.log(err);
+            res.redirect("/ideas");
+        }
+        else {
+            let user = await Profile.findById(decodedToken.id);
+
+        const idea = await Ideas.create({
+            Username: user.Username,
             Title: req.body.title,
             Description: req.body.description,
             Category: req.body.category,
             Date: today
         });
-    }catch (error){
-        console.log(error);
+        res.redirect("/ideas");
     }
+});
 })
 
 app.post("/contactUs", async (req, res) => {
