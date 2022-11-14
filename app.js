@@ -48,7 +48,7 @@ const Profile = require("./models/profile.model");
 const Post = require("./models/post.model");
 const { profileEnd } = require("console");
 const Event = require("./models/event.model");
-
+const Ideas = require("./models/ideas.model");
 
 app.get("*", checkUser);
 app.post("*", checkUser);
@@ -185,23 +185,53 @@ app.post("/signup", async (req, res) => {
     }
 });
 
-app.post("/contactUs", async (req, res) => {
+app.post("/addIdeas", async (req, res) => {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
 
+today = mm + '/' + dd + '/' + yyyy;
     try {
 
-        const msg = await ContactUs.create({
-            Name: req.body.firstname + " " + req.body.lastname,
-            Email: req.body.email,
-            Message: req.body.message
+        const user = await Profile.create({
+            Username: req.body.username,
+            Title: req.body.title,
+            Description: req.body.description,
+            Category: req.body.category,
+            Date: today
         });
-
-        // user.save().then(() => res.send("Successfully Uploaded"));
-    } catch (error) {
-        res.status(400).send("Error occured");
+    }catch (error){
+        console.log(error);
     }
+})
 
-    res.redirect("/")
-});
+app.post("/contactUs", async (req, res) => {
+
+    try{
+        var name = req.body.firstname + " " + req.body.lastname;
+        var email = req.body.email;
+        var msg = req.body.message;
+        const options  = {
+            from: 'tushmaheshwari@outlook.com',
+            to: 'tushmaheshwari28@gmail.com',
+            subject: 'Message from The Begetter Town',
+            text: `Name : ${name}
+                   Email: ${email}
+                   Message: ${msg}`
+        };
+
+        transporter.sendMail(options, function(err, info){
+            if(err){
+                console.log(err);
+            }
+            console.log("Sent : " + info.response);
+        })
+}catch(error){
+    res.status(400).send("Error occured");
+}
+    res.redirect("/");
+})
 
 app.post("/login", async (req, res) => {
     const username = req.body.username;
