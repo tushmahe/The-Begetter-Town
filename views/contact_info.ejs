@@ -1,0 +1,66 @@
+<%- include("partials/boiler") -%>
+  <link rel="stylesheet" href="/css/dashboardstyles.css">
+  <link rel="stylesheet" href="/css/sidebarstyles.css">
+  <%- include("partials/header") -%>
+    <%- include("partials/sidebar") -%>
+ 
+  <% if(!otheruser) { %>
+    <div class="myprofile">
+        <div class="userdata">
+          <p class="data field">Business Email</p>
+          <p class="data">:</p>
+          <p class="data">
+            <%= user.BusinessEmail %>
+          </p>
+        </div>
+        <div class="userdata">
+          <p class="data field">Phone Number</p>
+          <p class="data">:</p>
+          <p class="data">
+           +<%= user.CountryCode %>  <%= user.PhoneNumber %>
+          </p>
+        </div>
+        <div class="userdata">
+          <p class="data field">Address</p>
+          <p class="data">:</p>
+          <p class="data">
+            <%= user.Address %>
+          </p>
+        </div>
+      
+      </div>
+   
+      <% } else { %>
+        <div class="myprofile">
+          <div class="userdata">
+            <p class="data field">Business Email</p>
+            <p class="data">:</p>
+            <p class="data">
+              <%= otheruser.BusinessEmail %>
+            </p>
+          </div>
+          <div class="userdata">
+            <p class="data field">Phone Number</p>
+            <p class="data">:</p>
+            <p class="data">
+             +<%= otheruser.CountryCode %>  <%= otheruser.PhoneNumber %>
+            </p>
+          </div>
+          <div class="userdata">
+            <p class="data field">Address</p>
+            <p class="data">:</p>
+            <p class="data">
+              <%= otheruser.Address %>
+            </p>
+          </div>
+        
+        </div>
+        <% } %>  
+
+
+
+
+    </div>
+
+    <%- include("partials/footer") -%>
+</body>
