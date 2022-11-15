@@ -144,7 +144,7 @@ input[type="checkbox"]{
     height : 10px;
     border-radius : 20%;
     border : 1px solid #81C1C4;
-    /* webkit-appearance: none; */
+    -webkit-appearance: none;
     box-sizing : border-box;
 }
 input[type="checkbox"]:checked{
@@ -165,10 +165,10 @@ input[type="checkbox"]:checked{
     width: 100vw;
     display: none;
     position: fixed;
-    bottom: 0;
+    bottom: -30px;
     right: 15px;
-    border: 3px solid #f1f1f1;
-    z-index: 9;
+    /* border: 3px solid #f1f1f1; */
+    z-index: 20;
     padding:2rem;
   }
   
@@ -230,3 +230,68 @@ input[type="checkbox"]:checked{
     border: none;
     border-radius: 0.3rem;
   }
+
+
+  /* Read More CSS  */
+  .pop-up-button{
+    cursor: pointer;
+    display: inline;
+    border : none;
+    font-size: 0.7rem;;
+    background-color: #cccbc9;
+}
+.pop-up-button span:hover{
+    color : blue;
+}
+.pop-up{
+    /* visibility: hidden; */
+    display : flex;
+    flex-direction : column;
+    justify-content: center;
+    align-items : center;
+    position : fixed;
+    width : 50%;
+    height : auto;
+    top : 25%;
+    left : 25%;
+    background-color : #fefbf3;
+    z-index : 20;
+}
+.overlay{
+    position : fixed;
+    top : 0%;
+    left : 0%;
+    width : 100vw;
+    height : 100vh;
+    border: 1px solid black;
+    z-index : 10;
+    opacity : 0.8;
+    background-color : lightgrey;
+}
+.pop-up-cross{
+    border : none;
+    background-color: inherit;
+    width : 2vw;
+    height : 3vh;
+    font-size : 1.3rem;
+    margin-bottom : 20px;
+    align-self : flex-end;
+}
+.pop-up-header{
+    display : inline-block;
+    height : 10%;
+    width : 95%;
+    margin-bottom : 20px;
+    /* border : 1px solid black; */
+    font-size : 1.5rem;
+    font-weight: bolder;
+}
+.pop-up-content{
+    display : inline-block;
+    height : 10%;
+    margin-bottom : 20px;
+    /* border : 1px solid black; */
+    width : 95%;
+    font-size: 1rem;
+
+}
