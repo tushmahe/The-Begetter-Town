@@ -13,7 +13,7 @@
       </div>
       <% } else { %>
         <div class="login_signup">
-          <a href="/logout" class="login">Logout</a><a>|</a><a href="/myprofile" class="login">Dashboard</a>
+          <a href="/logout" class="login">Logout</a><a>|</a><a href="/myprofile/<%= user.Username %>" class="login">Dashboard</a>
         </div>
         <% } %>
   </nav>

@@ -48,6 +48,7 @@ const Profile = require("./models/profile.model");
 const Post = require("./models/post.model");
 const { profileEnd } = require("console");
 const Event = require("./models/event.model");
+const Ideas = require("./models/ideas.model");
 
 var pastEvents = [];
 var liveEvents = [];
@@ -139,17 +140,18 @@ app.get("*", checkUser);
 app.post("*", checkUser);
 
 app.get("/", async function (req, res) {
-    // const allevents = getEvents();
     getEvents();
-    // console.log(allevents);
 
     const all = await Post.find({});
 
-    // console.log(allevents);
-
-    // upcomingevents = allevents[2];
-    // console.log(allevents[1].length);
     res.render("index", {allPosts: all, upcoming: upcomingEvents});
+});
+
+app.get("/ideas", async function (req, res) {
+    const all = await Ideas.find({});
+
+    console.log(all);
+    res.render("ideas", allIdeas = all);
 });
 
 app.get("/login", function (req, res) {
@@ -175,6 +177,8 @@ app.get("/events", async function (req, res) {
 app.get("/ideas", function (req, res) {
     res.render("ideas");
 });
+
+
 app.get("/contactUs", function (req, res) {
     res.render("contactUs");
 });
@@ -185,25 +189,46 @@ app.get("/post_details/:postTitle", async function (req, res) {
     res.render("post_details", thispost = post);
 });
 
-app.get("/explore_by_category/:category", async function (req, res) {
 
-    const cate = await Post.find({ Category: req.params.category });
+app.get("/myprofile/:username", requireAuth, async function (req, res) {
+    console.log(req.params.username)
+    const linkuser = await Profile.findOne({ Username: req.params.username });
+    res.render("dashboard", otheruser = linkuser);
+});
 
-    var categoryEvents = [];
-    for(var i = 0; i < upcomingEvents.length; i++){
-        if(upcomingEvents[i].Category == req.params.category){
-            categoryEvents[categoryEvents.length] = upcomingEvents[i];
+
+app.get("/contact_info/:username", requireAuth,async function (req, res) {
+    console.log(req.params.username)
+    const linkuser = await Profile.findOne({ Username: req.params.username });
+    res.render("contact_info", otheruser = linkuser);
+});
+
+
+app.get("/add_post", requireAuth, async function (req, res) {
+    
+  
+    // const linkuser = await Profile.findOne({ Username: req.params.username });
+  
+   
+    const token = req.cookies.jwt;
+
+    jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
+        if (err) {
+            console.log(err);
+            res.redirect("/login");
         }
-    }
-    res.render("categories", { upcoming: categoryEvents, postcategory: req.params.category, posts: cate });
-});
+        else{
 
-app.get("/myprofile", requireAuth, function (req, res) {
-    res.render("dashboard", otheruser = null);
-});
+        //  var linkuser = await Profile.findOne({ Username: req.params.username });
+            let user = await Profile.findById(decodedToken.id);
+            console.log("%%%%%%%%%%%%%%%%%%%%%%%%%")
+            console.log(user.Username)
+            // console.log(linkuser.Username)
+            console.log("%%%%%%%%%%%%%%%%%%%%%%%%%")
+            res.render("add_post",user=user);
+        } 
+    })
 
-app.get("/add_post", requireAuth, function (req, res) {
-    res.render("add_post");
 });
 
 
@@ -250,6 +275,7 @@ app.post("/signup", async (req, res) => {
             Email: req.body.email,
             Password: password,
             Country: req.body.country,
+            CountryCode:req.body.countryCode,
             PhoneNumber: req.body.phonenumber,
             FieldOfInterest: req.body.fieldofinterest,
             TypeOfUser: TypeOfUser,
@@ -278,11 +304,11 @@ app.post("/signup", async (req, res) => {
             // }
             // const email = await Profile.findOne({Email: req.body.email});
             // if(email){
-
+                
             // }
             // const phoneno = await Profile.findOne({PhoneNumber: req.body.phonenumber});
             // if(phoneno){
-
+                
             // }
             res.send("Please make sure your username, e-mail ID and phone number are unique");
             // res.redirect("signup");
@@ -290,30 +316,69 @@ app.post("/signup", async (req, res) => {
     }
 });
 
+app.post("/addIdeas", async (req, res) => {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+
+today = mm + '/' + dd + '/' + yyyy;
+
+const token = req.cookies.jwt;
+
+    jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
+        if (err) {
+            console.log(err);
+            res.redirect("/ideas");
+        }
+        else {
+            let user = await Profile.findById(decodedToken.id);
+
+        const idea = await Ideas.create({
+            Username: user.Username,
+            Title: req.body.title,
+            Description: req.body.description,
+            Category: req.body.category,
+            Date: today
+        });
+        res.redirect("/ideas");
+    }
+});
+})
+
 app.post("/contactUs", async (req, res) => {
 
-    try {
+    try{
+        var name = req.body.firstname + " " + req.body.lastname;
+        var email = req.body.email;
+        var msg = req.body.message;
+        const options  = {
+            from: 'tushmaheshwari@outlook.com',
+            to: 'tushmaheshwari28@gmail.com',
+            subject: 'Message from The Begetter Town',
+            text: `Name : ${name}
+                   Email: ${email}
+                   Message: ${msg}`
+        };
 
-        const msg = await ContactUs.create({
-            Name: req.body.firstname + " " + req.body.lastname,
-            Email: req.body.email,
-            Message: req.body.message
-        });
-
-        // user.save().then(() => res.send("Successfully Uploaded"));
-    } catch (error) {
-        res.status(400).send("Error occured");
-    }
-
-    res.redirect("/")
-});
+        transporter.sendMail(options, function(err, info){
+            if(err){
+                console.log(err);
+            }
+            console.log("Sent : " + info.response);
+        })
+}catch(error){
+    res.status(400).send("Error occured");
+}
+    res.redirect("/");
+})
 
 app.post("/login", async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
     const user = await Profile.findOne({ Username: username });
 
-    console.log(user);
+    // console.log(user);
 
     if (user) {
 
@@ -328,8 +393,9 @@ app.post("/login", async (req, res) => {
             );
 
             res.cookie('jwt', token, { maxAge: 100000000000 });
-
             console.log("Logged in successfully");
+
+            res.redirect("/");
 
             // res.redirect("http://localhost:3000");
         }
@@ -345,26 +411,26 @@ app.post("/login", async (req, res) => {
 });
 
 
-app.get("/mypost", requireAuth, async function (req, res) {
+app.get("/mypost/:username", requireAuth, async function(req, res) {
     const token = req.cookies.jwt;
-
+    console.log(req.params.username)
     jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
         if (err) {
             console.log(err);
             // res.redirect("/login");
         }
-        else {
+        else{
             let user = await Profile.findById(decodedToken.id);
-            const all = await Post.find({ Username: user.Username });
+            const all = await Post.find({Username:req.params.username});
 
             // console.log(all);
-
-            res.render("mypost", allPosts = all);
+        
+            res.render("mypost",allPosts = all);
         }
     })
-
-
-
+  
+   
+   
 });
 
 app.get("/logout", (req, res) => {
@@ -372,7 +438,7 @@ app.get("/logout", (req, res) => {
     res.redirect('/');
 });
 
-app.post("/add_post", (req, res) => {
+app.post("/add_post/:username", (req, res) => {
 
     // console.log(req.body.title);
 
@@ -385,29 +451,9 @@ app.post("/add_post", (req, res) => {
         }
         else {
             let user = await Profile.findById(decodedToken.id);
-            var filename;
-
-            if (req.files && Object.keys(req.files).length !== 0) {
-
-                // Uploaded path
-                uploadedFile = req.files.uploadFile;
-                filename = Date.now() + uploadedFile.name;
-
-                // Logging uploading file
-                // console.log(uploadedFile);
-
-                // Upload path
-                const uploadPath = __dirname
-                    + "/public/img/postPic/" + filename;
-
-                // To save the file using mv() function
-                uploadedFile.mv(uploadPath);
-            }
-            else {
-                res.send("No file uploaded !!");
-            }
-
-            console.log(filename);
+            // console.log("***********************************")
+             console.log(user)
+            //  console.log("***********************************")
             const newPost = await Post.create({
                 Username: user.Username,
                 Title: req.body.title,
@@ -424,14 +470,18 @@ app.post("/add_post", (req, res) => {
 
 app.post("/deletePost", async (req, res) => {
 
-    Post.findOneAndRemove({ Title: req.body.title }, () => {
+    const thispost = await Post.findOne({Title: req.body.title});
+
+    console.log(thispost);
+
+    Post.findOneAndRemove({Title: req.body.title}, () => {
         res.redirect("/mypost");
     });
 });
 
-app.get("/profile/:username", async (req, res) => {
+app.get("/profile/:username", async (req, res) =>{
     // console.log(req.params.username);
-    var creator = await Profile.findOne({ Username: req.params.username });
+    var creator = await Profile.findOne({Username: req.params.username});
     res.render("dashboard", otheruser = creator);
 });
 
