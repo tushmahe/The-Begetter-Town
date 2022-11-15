@@ -7,7 +7,7 @@ body{
 }
 
 .ideas-container{
-    margin : 50px 5vw;
+    margin : 5vh 5vw;
     width : 90vw;
     height : auto;
     /* border : 1px solid ; */
@@ -156,7 +156,7 @@ input[type="checkbox"]:checked{
 
 /* POP_UP CSS */
 .form-popup {
-    width: 100%;
+    width: 100vw;
     display: none;
     position: fixed;
     bottom: 0;
@@ -173,7 +173,8 @@ input[type="checkbox"]:checked{
   
   /* Full-width input fields */
    .form-container {
-    width: 100%;
+    /* height: auto; */
+    width: 100vw;
     padding: 15px;
     margin: 0;
     border: none;
