@@ -322,7 +322,7 @@ app.post("/addIdeas", async (req, res) => {
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
 
-today = mm + '/' + dd + '/' + yyyy;
+today = dd + '/' + mm + '/' + yyyy;
 
 const token = req.cookies.jwt;
 
