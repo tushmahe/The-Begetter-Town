@@ -7,7 +7,7 @@ body{
 }
 
 .ideas-container{
-    margin : 50px 5vw;
+    margin : 5vh 5vw;
     width : 90vw;
     height : auto;
     /* border : 1px solid ; */
@@ -35,9 +35,9 @@ body{
 .left-container{
     display : flex;
     flex-direction : column;
-    flex-wrap : nowrap;
-    justify-content: space-between;
-    align-items : flex-start;
+    /* flex-wrap : nowrap; */
+    /* justify-content: space-between;
+    align-items : flex-start; */
     width : 60vw;
     height : 100vh;
     background-color : #cccbc9;
@@ -55,8 +55,10 @@ body{
     height : 96vh;
 }
 .containers{
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
     width : inherit;
-    height : 11vh;
+    height : 6.5rem;
     border-bottom : 3px solid black;
     display : flex;
     flex-direction : column;
@@ -118,6 +120,9 @@ li:not(.filter-list-items:first-of-type):hover{
     
     /* border : 1px solid black; */
 }
+.containers h7{
+    font-size: 0.5rem;
+}
 .text-content a{
     text-decoration: none;
     font-size : 0.7rem;
@@ -131,6 +136,7 @@ li:not(.filter-list-items:first-of-type):hover{
     color : white;
     margin-left : 1vw;
     margin-top : 2vh; 
+    padding:0.2rem
 }
 
 input[type="checkbox"]{
@@ -156,13 +162,14 @@ input[type="checkbox"]:checked{
 
 /* POP_UP CSS */
 .form-popup {
-    width: 100%;
+    width: 100vw;
     display: none;
     position: fixed;
-    bottom: 0;
+    bottom: -30px;
     right: 15px;
-    border: 3px solid #f1f1f1;
-    z-index: 9;
+    /* border: 3px solid #f1f1f1; */
+    z-index: 20;
+    padding:2rem;
   }
   
   /* Add styles to the form container */
@@ -173,7 +180,8 @@ input[type="checkbox"]:checked{
   
   /* Full-width input fields */
    .form-container {
-    width: 100%;
+    /* height: auto; */
+    width: 100vw;
     padding: 15px;
     margin: 0;
     border: none;
@@ -211,3 +219,79 @@ input[type="checkbox"]:checked{
   .form-container .btn:hover, .open-button:hover {
     opacity: 1;
   }
+
+  .btn{
+    color:red;
+  }
+  .pbtn{
+    margin-top: 1rem;
+    color:white;
+    background-color: #81C1C4;
+    border: none;
+    border-radius: 0.3rem;
+  }
+
+
+  /* Read More CSS  */
+  .pop-up-button{
+    cursor: pointer;
+    display: inline;
+    border : none;
+    font-size: 0.7rem;;
+    background-color: #cccbc9;
+}
+.pop-up-button span:hover{
+    color : blue;
+}
+.pop-up{
+    /* visibility: hidden; */
+    display : flex;
+    flex-direction : column;
+    justify-content: center;
+    align-items : center;
+    position : fixed;
+    width : 50%;
+    height : auto;
+    top : 25%;
+    left : 25%;
+    background-color : #fefbf3;
+    z-index : 20;
+}
+.overlay{
+    position : fixed;
+    top : 0%;
+    left : 0%;
+    width : 100vw;
+    height : 100vh;
+    border: 1px solid black;
+    z-index : 10;
+    opacity : 0.8;
+    background-color : lightgrey;
+}
+.pop-up-cross{
+    border : none;
+    background-color: inherit;
+    width : 2vw;
+    height : 3vh;
+    font-size : 1.3rem;
+    margin-bottom : 20px;
+    align-self : flex-end;
+}
+.pop-up-header{
+    display : inline-block;
+    height : 10%;
+    width : 95%;
+    margin-bottom : 20px;
+    /* border : 1px solid black; */
+    font-size : 1.5rem;
+    font-weight: bolder;
+}
+.pop-up-content{
+    display : inline-block;
+    height : 10%;
+    margin-bottom : 20px;
+    /* border : 1px solid black; */
+    width : 95%;
+    font-size: 1rem;
+
+}

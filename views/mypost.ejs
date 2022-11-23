@@ -1,6 +1,6 @@
 <%- include("partials/boiler") -%>
-  <link rel="stylesheet" href="css/mypoststyles.css">
-  <link rel="stylesheet" href="css/sidebarstyles.css">
+  <link rel="stylesheet" href="/css/mypoststyles.css">
+  <link rel="stylesheet" href="/css/sidebarstyles.css">
   <%- include("partials/header") -%>
     <%- include("partials/sidebar") -%>
       <div class="mypost">
@@ -15,7 +15,7 @@
                     <input type="text" class="inputfield" name="title" value="<%= allPosts[i].Title %>">
                     <button class="btn" type="submit">X</button>
                   </form>
-                  <img class="card-img-top" src="/img/postPic/<%= allPosts[i].postPicture %>" alt="Card image cap">
+                  <img class="card-img-top" src="img/postPic/<%= allPosts[i].postPicture %>" alt="Card image cap">
                   <div class="card-body mb-4">
                     <p>
                       <%= allPosts[i].Title %>
@@ -39,7 +39,6 @@
         </body>
         <script>
           const arr = document.getElementsByClassName("inputfield");
-
           for (var i = 0; i < arr.length; i++) {
             arr[i].style.display = "none";
           }

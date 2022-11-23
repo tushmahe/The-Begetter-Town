@@ -5,13 +5,17 @@
         <span class = "container-heading">IDEAS</span>
         <div class = "main-container">
             <div class = "left-container">
+                <% for(var i = 0; i < allIdeas.length; i++){ %>
                 <div class = "containers">
-                    <p class = "text-content">
-                        Bla Bla 
-                        <a href = ""id ="pop">...READ MORE</a>
-                    </p>
-                    <h6>Created by someone</h6>
+                    <div class = "text-content">
+                        <h5><%= allIdeas[i].Title %></h5>
+                        <p><%= allIdeas[i].Description.substring(0, 100) %><a class="pop-up-button"><span>..Read more</span></a></p>
+                    </div>
+                    <br>
+                    <h6>Created by <%= allIdeas[i].Username %></h6>
+                    <h7>Date Posted : <%= allIdeas[i].Date %></h7>
                 </div>
+                <% } %>
             </div>
             <div class = "brdr-container"></div>
             <div class = "fltr-container">
@@ -37,11 +41,7 @@
                     </li>
                     <li class = "filter-list-items">
                         <input type = "checkbox">
-                        <span>FASHION DESIGNING</span>
-                    </li>
-                    <li class = "filter-list-items">
-                        <input type = "checkbox">
-                        <span>OTHERS</span>
+                        <span>FASHION</span>
                     </li>
                 </ul>
                 <button class = "add-post" onclick="openForm()">ADD IDEA</button>
@@ -50,27 +50,32 @@
     </div> 
 
 <div class="form-popup" id="myForm">
-  <form action="/action_page.php" class="form-container">
-    <h1>POST</h1>  
+    <button class="btn" type="submit" onclick="closeForm()">X</button>
+  <form action="/addIdeas" method = "POST" class="form-container">  
 
-    <label for="title"><b>Title</b></label>
-    <input type="text" placeholder="Add Title" name="title" required>
-
-    <label for="desc"><b>Description</b></label>
-    <textarea name="desc" id="" cols="30" rows="10" placeholder="Add Description" required></textarea>
-
+    <div class="form-row">
+        <div class="col-md-12 mb-2">
+            <label for="title">Title</label>
+            <input type="text" class="form-control" id="validationDefault01" name = "title" placeholder="Title"
+                value="" required>
+        </div>
+        </div>
+        <div class="mb-3">
+            <label for="description">Description</label>
+            <textarea rows="4" class="form-control" id="validationTextarea" name = "description" placeholder="Description"
+                required></textarea>
+        </div>
     <label for="category">Category Type</label>
     <select name="category">
-        <option value="volvo">PAINTINGS</option>
-        <option value="saab">PHOTOGRAPHY</option>
-        <option value="opel">JEWELLERY</option>
-        <option value="opel">HANDICRAFT</option>
-        <option value="audi">FASHION DESIGNING</option>
-        <option value="audi">OTHERS</option>
+        <option value="Paintings">PAINTINGS</option>
+        <option value="Photography">PHOTOGRAPHY</option>
+        <option value="Jewellery">JEWELLERY</option>
+        <option value="Handicraft">HANDICRAFT</option>
+        <option value="Fashion">FASHION</option>
     </select>
-
-    <button type="submit" class="btn">POST</button>
-    <button type="button" class="btn cancel" onclick="closeForm()">✘</button>
+    <div>
+    <button type="submit" class="pbtn" style="width: 5rem; height:2.3rem;">POST</button>
+</div>
   </form>
 </div>
     <%- include("partials/footer") -%>
