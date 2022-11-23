@@ -15,7 +15,7 @@ const formidable = require('formidable');
 const fileUpload = require("express-fileupload");
 const flash = require('connect-flash');
 const session = require('express-session');
-const window = require('window');
+const qr = require('qrcode')
 
 
 const transporter = nodemailer.createTransport({
@@ -26,7 +26,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-var flag=1;
+var flag = 1;
 const app = express();
 
 const JWT_SECRET = "uilfyvas4563677^$%&yufvy^T&YUVH&^vjuvgutcuk^&UVf&^FuVUfo6^vlufO&^foVUvOUIBG78g7O06f7((^&%R&%$e64#W&^5";
@@ -48,7 +48,7 @@ app.use(cookieParser());
 app.use(fileUpload());
 app.use(flash());
 
-app.use(function(req, res, next){
+app.use(function (req, res, next) {
     res.locals.message = req.flash();
     next();
 });
@@ -72,7 +72,7 @@ var pastEvents = [];
 var liveEvents = [];
 var upcomingEvents = [];
 
-async function getEvents(){
+async function getEvents() {
     pastEvents = [];
     liveEvents = [];
     upcomingEvents = [];
@@ -82,17 +82,17 @@ async function getEvents(){
     let month = date.getMonth() + 1;
     let year = date.getFullYear();
 
-    if(day < 10){
+    if (day < 10) {
         day = "0" + day.toString();
     }
-    else{
+    else {
         day = day.toString();
     }
 
-    if(month < 10){
+    if (month < 10) {
         month = "0" + month.toString();
     }
-    else{
+    else {
         month = month.toString();
     }
 
@@ -106,37 +106,37 @@ async function getEvents(){
     // var liveEvents = [];
     // var upcomingEvents = [];
 
-    for(var i = 0; i < allevents.length; i++){
-        if(allevents[i].startDate.substr(0, 4) < year){
-            Event.findOneAndRemove({Title: allevents[i].Title});
+    for (var i = 0; i < allevents.length; i++) {
+        if (allevents[i].startDate.substr(0, 4) < year) {
+            Event.findOneAndRemove({ Title: allevents[i].Title });
         }
 
-        else if(allevents[i].startDate.substr(0, 4) == year){
+        else if (allevents[i].startDate.substr(0, 4) == year) {
             // console.log(allevents[i].startDate.substr(5, 2))
-            if(allevents[i].startDate.substr(5, 2) > month){
+            if (allevents[i].startDate.substr(5, 2) > month) {
                 // console.log("this");
                 upcomingEvents[upcomingEvents.length] = allevents[i];
             }
-            else if(allevents[i].startDate.substr(5, 2) < month){
+            else if (allevents[i].startDate.substr(5, 2) < month) {
                 // console.log("this");
                 pastEvents[pastEvents.length] = allevents[i];
             }
-            else{
-                if(allevents[i].startDate.substr(8, 2) <= day){
+            else {
+                if (allevents[i].startDate.substr(8, 2) <= day) {
                     // console.log(allevents[i].endDate.substr(8, 2));
-                    if(allevents[i].endDate.substr(8, 2) >= day){
+                    if (allevents[i].endDate.substr(8, 2) >= day) {
                         liveEvents[liveEvents.length] = allevents[i];
                     }
-                    else{
+                    else {
                         pastEvents[pastEvents.length] = allevents[i];
                     }
-                } 
-                else{
+                }
+                else {
                     upcomingEvents[upcomingEvents.length] = allevents[i];
                 }
             }
         }
-        else{
+        else {
             upcomingEvents[upcomingEvents.length] = allevents[i];
         }
     }
@@ -162,7 +162,7 @@ app.get("/", async function (req, res) {
 
     const all = await Post.find({});
 
-    res.render("index.ejs", {allPosts: all, upcoming: upcomingEvents});
+    res.render("index.ejs", { allPosts: all, upcoming: upcomingEvents });
 });
 
 app.get("/ideas", async function (req, res) {
@@ -220,17 +220,26 @@ app.get("/signup", function (req, res) {
 });
 
 app.get("/events", async function (req, res) {
-    
+
     await getEvents();
     // console.log(upcomingEvents);
 
-    res.render("events", {past: pastEvents, live: liveEvents, upcoming: upcomingEvents});
+    res.render("events", { past: pastEvents, live: liveEvents, upcoming: upcomingEvents });
 });
 app.get("/explore_by_category/:category", async function (req, res) {
+    getEvents();
     // console.log(req.params.category);
-    const cate = await Post.find({Category: req.params.category});
+    const cate = await Post.find({ Category: req.params.category });
+
+    var upcomingByCategory = [];
+
+    for(var i = 0; i < upcomingEvents.length; i++){
+        if(upcomingEvents[i].Category == req.params.category){
+            upcomingByCategory[upcomingByCategory.length] = upcomingEvents[i];
+        }
+    }
     // console.log(cate);
-    res.render("categories", {posts : cate, postcategory : req.params.category});
+    res.render("categories", { posts: cate, postcategory: req.params.category, upcoming: upcomingByCategory});
 });
 
 
@@ -259,64 +268,17 @@ app.get("/contact_info/:username", async function (req, res) {
 
 
 app.get("/add_post", requireAuth, async function (req, res) {
-    
-  
-    console.log(req.body.title);
 
-    const token = req.cookies.jwt;
-
-    jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
-        if (err) {
-            console.log(err);
-            res.redirect("/login");
-        }
-        else {
-            let user = await Profile.findById(decodedToken.id);
-            var filename;
-
-            if (req.files && Object.keys(req.files).length !== 0) {
-
-                // Uploaded path
-                uploadedFile = req.files.uploadFile;
-                filename = Date.now() + uploadedFile.name;
-
-                // Logging uploading file
-                // console.log(uploadedFile);
-
-                // Upload path
-                const uploadPath = __dirname
-                    + "/public/img/postPic/" + filename;
-
-                // To save the file using mv() function
-                uploadedFile.mv(uploadPath);
-            }
-            else {
-                res.send("No file uploaded !!");
-            }
-
-            console.log(filename);
-            const newPost = await Post.create({
-                Username: user.Username,
-                Title: req.body.title,
-                Description: req.body.description,
-                Category: user.FieldOfInterest,
-                postPicture: filename
-            });
-
-        }
-    });
-
-    res.redirect("/");
-
+    res.render("add_post");
 });
 
-app.post("/filter_ideas", async (req, res)=> {
+app.post("/filter_ideas", async (req, res) => {
     var filter = req.body.filter;
     console.log(filter);
     var url = "filter_ideas/" + filter;
-    if(filter!=null){
-       res.redirect(url);
-    }else{
+    if (filter != null) {
+        res.redirect(url);
+    } else {
         res.redirect("/ideas");
     }
 })
@@ -363,7 +325,7 @@ app.post("/signup", async (req, res) => {
             Email: req.body.email,
             Password: password,
             Country: req.body.country,
-            CountryCode:req.body.countryCode,
+            CountryCode: req.body.countryCode,
             PhoneNumber: req.body.phonenumber,
             FieldOfInterest: req.body.fieldofinterest,
             TypeOfUser: TypeOfUser,
@@ -381,6 +343,10 @@ app.post("/signup", async (req, res) => {
             JWT_SECRET
         );
 
+        let qrfilename = __dirname + "/public/img/qrPic/" + req.body.username + ".png";
+        let text = "http://localhost:3000/qr/" + req.body.username;
+        await qr.toFile(qrfilename, text);
+
         return res.cookie({ "token": token }).redirect("/login");
     } catch (error) {
         if (error.code === 11000) {
@@ -392,11 +358,11 @@ app.post("/signup", async (req, res) => {
             // }
             // const email = await Profile.findOne({Email: req.body.email});
             // if(email){
-                
+
             // }
             // const phoneno = await Profile.findOne({PhoneNumber: req.body.phonenumber});
             // if(phoneno){
-                
+
             // }
             res.send("Please make sure your username, e-mail ID and phone number are unique");
             // res.redirect("signup");
@@ -431,9 +397,9 @@ app.post("/addIdeas", async (req, res) => {
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
 
-today = dd + '/' + mm + '/' + yyyy;
+    today = dd + '/' + mm + '/' + yyyy;
 
-const token = req.cookies.jwt;
+    const token = req.cookies.jwt;
 
     jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
         if (err) {
@@ -443,25 +409,25 @@ const token = req.cookies.jwt;
         else {
             let user = await Profile.findById(decodedToken.id);
 
-        const idea = await Ideas.create({
-            Username: user.Username,
-            Title: req.body.title,
-            Description: req.body.description,
-            Category: req.body.category,
-            Date: today
-        });
-        res.redirect("/ideas");
-    }
-});
+            const idea = await Ideas.create({
+                Username: user.Username,
+                Title: req.body.title,
+                Description: req.body.description,
+                Category: req.body.category,
+                Date: today
+            });
+            res.redirect("/ideas");
+        }
+    });
 })
 
 app.post("/contactUs", async (req, res) => {
 
-    try{
+    try {
         var name = req.body.firstname + " " + req.body.lastname;
         var email = req.body.email;
         var msg = req.body.message;
-        const options  = {
+        const options = {
             from: 'tushmaheshwari@outlook.com',
             to: 'tushmaheshwari28@gmail.com',
             subject: 'Message from The Begetter Town',
@@ -470,15 +436,15 @@ app.post("/contactUs", async (req, res) => {
                    Message: ${msg}`
         };
 
-        transporter.sendMail(options, function(err, info){
-            if(err){
+        transporter.sendMail(options, function (err, info) {
+            if (err) {
                 console.log(err);
             }
             console.log("Sent : " + info.response);
         })
-}catch(error){
-    res.status(400).send("Error occured");
-}
+    } catch (error) {
+        res.status(400).send("Error occured");
+    }
     res.redirect("/");
 })
 
@@ -494,7 +460,7 @@ app.post("/login", async (req, res) => {
 
         const validPassword = await bcrypt.compare(password, user.Password);
 
-        if(validPassword){
+        if (validPassword) {
             const token = jwt.sign(
                 {
                     id: user._id,
@@ -506,7 +472,7 @@ app.post("/login", async (req, res) => {
             res.cookie('jwt', token, { maxAge: 100000000000 });
             res.redirect("/");
         }
-        else{
+        else {
             res.send("incorrect password");
         }
 
@@ -520,7 +486,7 @@ app.post("/login", async (req, res) => {
 });
 
 
-app.get("/mypost/:username", requireAuth, async function(req, res) {
+app.get("/mypost/:username", requireAuth, async function (req, res) {
     const token = req.cookies.jwt;
     console.log(req.params.username)
     jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
@@ -528,18 +494,18 @@ app.get("/mypost/:username", requireAuth, async function(req, res) {
             console.log(err);
             // res.redirect("/login");
         }
-        else{
+        else {
             let user = await Profile.findById(decodedToken.id);
-            const all = await Post.find({Username:req.params.username});
+            const all = await Post.find({ Username: req.params.username });
 
             // console.log(all);
-        
-            res.render("mypost",allPosts = all);
+
+            res.render("mypost", allPosts = all);
         }
     })
-  
-   
-   
+
+
+
 });
 
 app.get("/logout", (req, res) => {
@@ -599,18 +565,18 @@ app.post("/add_post/:username", (req, res) => {
 
 app.post("/deletePost", async (req, res) => {
 
-    const thispost = await Post.findOne({Title: req.body.title});
+    const thispost = await Post.findOne({ Title: req.body.title });
 
     console.log(thispost);
 
-    Post.findOneAndRemove({Title: req.body.title}, () => {
+    Post.findOneAndRemove({ Title: req.body.title }, () => {
         res.redirect("/mypost");
     });
 });
 
-app.get("/profile/:username", async (req, res) =>{
+app.get("/profile/:username", async (req, res) => {
     console.log(req.params.username);
-    var creator = await Profile.findOne({Username: req.params.username});
+    var creator = await Profile.findOne({ Username: req.params.username });
     res.render("dashboard", otheruser = creator);
 });
 
@@ -654,8 +620,10 @@ app.post("/add_event", async (req, res) => {
     res.redirect("/");
 });
 
-
-
+app.get("/qr/:username", async (req, res) => {
+    const src = "/img/qrPic/" + req.params.username;
+    res.render("myqr", {user: req.params.username});
+});
 
 app.listen(3000, function () {
     console.log("Server started on port 3000");
