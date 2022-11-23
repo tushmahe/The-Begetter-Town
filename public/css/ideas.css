@@ -134,11 +134,20 @@ li:not(.filter-list-items:first-of-type):hover{
     border-radius : 5%;
     background-color: #81C1C4;
     color : white;
-    margin-left : 1vw;
+    margin-left : 46rem;
     margin-top : 2vh; 
     padding:0.2rem
 }
-
+.filter{
+    width : 7vw;
+    height : 7vh;
+    border-radius : 5%;
+    background-color: #81C1C4;
+    color : white;
+    margin-top : 2vh; 
+    padding:0.2rem;
+    border : none;
+}
 input[type="checkbox"]{
     width : 10px;
     height : 10px;
