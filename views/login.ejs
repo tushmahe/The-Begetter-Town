@@ -64,7 +64,14 @@
                   <div class="form-group first">
                     <label for="username">Username</label>
                     <input type="text" class="form-control" id="username" name="username">
+                    <!-- <p>Wrong username</p> -->
+                    <% if(locals.message){ %>
+                      <div class = "alert alert-success">
+                        <p><%= message.errors %></p>
+                      </div>
+                    <% } %>
                   </div>
+
                   <div class="form-group last mb-4">
                     <label for="password">Password</label>
                     <input type="password" class="form-control" id="password" name="password">
@@ -98,7 +105,7 @@
       form.addEventListener('submit', login)
 
       async function login(event) {
-        event.preventDefault()
+        // event.preventDefault()
         const username = document.getElementById('username').value
         const password = document.getElementById('password').value
         try {
