@@ -6,7 +6,7 @@
 
 
 
-      <form class="data" action = "/add_post" enctype="multipart/form-data" method = "POST">
+      <form class="data" action = "/add_post/<%= user.Username %>" enctype="multipart/form-data" method = "POST">
     <div class="form-group postfield">
       <label for="exampleFormControlInput1" class="postdata">Post Title</label>
       <input type="text" class="form-control dataplace" id="exampleFormControlInput1" name = "title">

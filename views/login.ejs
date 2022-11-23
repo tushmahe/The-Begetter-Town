@@ -65,9 +65,9 @@
                     <label for="username">Username</label>
                     <input type="text" class="form-control" id="username" name="username">
                     <!-- <p>Wrong username</p> -->
-                    <% if(locals.message){ %>
+                    <% if(message.length > 0){ %>
                       <div class = "alert alert-success">
-                        <p><%= message.errors %></p>
+                        <p><%= message %></p>
                       </div>
                     <% } %>
                   </div>

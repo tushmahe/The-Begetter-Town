@@ -34,7 +34,7 @@ app.set('view engine', 'ejs');
 
 app.use(session({
     secret: 'codeforgeek',
-    saveUninitialized: true,
+    saveUninitialized: false,
     resave: true
 }));
 
@@ -170,7 +170,7 @@ app.get("/ideas", async function (req, res) {
 });
 
 app.get("/login", function (req, res) {
-    console.log(req.flash('errors'));
+    // console.log(req.flash('errors'));
     res.render('login', errors = req.flash('errors'));
 });
 
@@ -190,9 +190,9 @@ app.get("/events", async function (req, res) {
 
     res.render("events", {past: pastEvents, live: liveEvents, upcoming: upcomingEvents});
 });
-app.get("/ideas", function (req, res) {
-    res.render("ideas");
-});
+// app.get("/ideas", function (req, res) {
+//     res.render("ideas");
+// });
 
 
 app.get("/contactUs", function (req, res) {
@@ -213,7 +213,7 @@ app.get("/myprofile/:username", requireAuth, async function (req, res) {
 });
 
 
-app.get("/contact_info/:username", requireAuth,async function (req, res) {
+app.get("/contact_info/:username", async function (req, res) {
     console.log(req.params.username)
     const linkuser = await Profile.findOne({ Username: req.params.username });
     res.render("contact_info", otheruser = linkuser);
@@ -399,7 +399,13 @@ app.post("/login", async (req, res) => {
 
     if (user) {
 
-        if (bcrypt.compare(password, user.Password)) {
+        bcrypt.compare(password, user.Password, (err, cres)=>{
+            if(err){
+                res.send(err);
+            }
+            if(!cres){
+                res.send("incorrect password");
+            }
 
             const token = jwt.sign(
                 {
@@ -408,31 +414,17 @@ app.post("/login", async (req, res) => {
                 },
                 JWT_SECRET
             );
-
+            console.log("logged in");
             res.cookie('jwt', token, { maxAge: 100000000000 });
             res.redirect("/");
-            // console.log("Logged in successfully");
+        });
 
-            // window.location.assign('/')
-
-            // res.redirect("http://localhost:3000");
-        }
-        else {
-            res.send("Incorrect Password");
-        }
-
-        // res.send("incorrect password");
     }
     else {
         req.flash('errors', `Please enter the correct username`);
         res.locals.message = req.flash();
 
-        // req.session.save(function(){
-        //     res.redirect("/login");
-        // })
         res.redirect("/login");
-        // console.log("wrong username");
-        // res.redirect("/login");
     }
 });
 
@@ -477,9 +469,29 @@ app.post("/add_post/:username", (req, res) => {
         }
         else {
             let user = await Profile.findById(decodedToken.id);
-            // console.log("***********************************")
-             console.log(user)
-            //  console.log("***********************************")
+            var filename;
+
+            if (req.files && Object.keys(req.files).length !== 0) {
+
+                // Uploaded path
+                uploadedFile = req.files.uploadFile;
+                filename = Date.now() + uploadedFile.name;
+
+                // Logging uploading file
+                // console.log(uploadedFile);
+
+                // Upload path
+                const uploadPath = __dirname
+                    + "/public/img/postPic/" + filename;
+
+                // To save the file using mv() function
+                uploadedFile.mv(uploadPath);
+            }
+            else {
+                res.send("No file uploaded !!");
+            }
+
+            console.log(filename);
             const newPost = await Post.create({
                 Username: user.Username,
                 Title: req.body.title,
@@ -506,7 +518,7 @@ app.post("/deletePost", async (req, res) => {
 });
 
 app.get("/profile/:username", async (req, res) =>{
-    // console.log(req.params.username);
+    console.log(req.params.username);
     var creator = await Profile.findOne({Username: req.params.username});
     res.render("dashboard", otheruser = creator);
 });
@@ -549,7 +561,10 @@ app.post("/add_event", async (req, res) => {
 
 
     res.redirect("/");
-})
+});
+
+
+
 
 app.listen(3000, function () {
     console.log("Server started on port 3000");
