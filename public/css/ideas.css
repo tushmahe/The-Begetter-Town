@@ -39,7 +39,7 @@ body{
     /* justify-content: space-between;
     align-items : flex-start; */
     width : 60vw;
-    height : 100vh;
+    height : 39rem;
     background-color : #cccbc9;
 }
 .fltr-container{
@@ -303,4 +303,11 @@ input[type="checkbox"]:checked{
     width : 95%;
     font-size: 1rem;
 
+}
+.pagination{
+    justify-content: center;
+}
+.pageno{
+    background-color: #81C1C4;
+    color:white;
 }
