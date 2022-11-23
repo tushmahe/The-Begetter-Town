@@ -229,9 +229,8 @@ app.get("/contact_info/:username", async function (req, res) {
 app.get("/add_post", requireAuth, async function (req, res) {
     
   
-    // const linkuser = await Profile.findOne({ Username: req.params.username });
-  
-   
+    console.log(req.body.title);
+
     const token = req.cookies.jwt;
 
     jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
@@ -239,17 +238,43 @@ app.get("/add_post", requireAuth, async function (req, res) {
             console.log(err);
             res.redirect("/login");
         }
-        else{
-
-        //  var linkuser = await Profile.findOne({ Username: req.params.username });
+        else {
             let user = await Profile.findById(decodedToken.id);
-            console.log("%%%%%%%%%%%%%%%%%%%%%%%%%")
-            console.log(user.Username)
-            // console.log(linkuser.Username)
-            console.log("%%%%%%%%%%%%%%%%%%%%%%%%%")
-            res.render("add_post",user=user);
-        } 
-    })
+            var filename;
+
+            if (req.files && Object.keys(req.files).length !== 0) {
+
+                // Uploaded path
+                uploadedFile = req.files.uploadFile;
+                filename = Date.now() + uploadedFile.name;
+
+                // Logging uploading file
+                // console.log(uploadedFile);
+
+                // Upload path
+                const uploadPath = __dirname
+                    + "/public/img/postPic/" + filename;
+
+                // To save the file using mv() function
+                uploadedFile.mv(uploadPath);
+            }
+            else {
+                res.send("No file uploaded !!");
+            }
+
+            console.log(filename);
+            const newPost = await Post.create({
+                Username: user.Username,
+                Title: req.body.title,
+                Description: req.body.description,
+                Category: user.FieldOfInterest,
+                postPicture: filename
+            });
+
+        }
+    });
+
+    res.redirect("/");
 
 });
 
@@ -414,14 +439,9 @@ app.post("/login", async (req, res) => {
 
     if (user) {
 
-        bcrypt.compare(password, user.Password, (err, cres)=>{
-            if(err){
-                res.send(err);
-            }
-            if(!cres){
-                res.send("incorrect password");
-            }
+        const validPassword = await bcrypt.compare(password, user.Password);
 
+        if(validPassword){
             const token = jwt.sign(
                 {
                     id: user._id,
@@ -429,10 +449,13 @@ app.post("/login", async (req, res) => {
                 },
                 JWT_SECRET
             );
-            console.log("logged in");
+            // console.log("logged in");
             res.cookie('jwt', token, { maxAge: 100000000000 });
             res.redirect("/");
-        });
+        }
+        else{
+            res.send("incorrect password");
+        }
 
     }
     else {
