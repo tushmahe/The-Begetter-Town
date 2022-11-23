@@ -1,6 +1,7 @@
 <%- include("partials/boiler") -%>
   <link rel="stylesheet" href="/css/post_detailsstyles.css">
   <%- include("partials/header") -%>
+ 
   <div class="myprofile">
     <div class="userdata">
       <p class="data field">Title</p>
@@ -8,7 +9,7 @@
       <p class="data"><%= thispost.Title %></p>
     </div>
   <div id="post">
-        <img class="d-block w-100" id="post" src="\img\Hey! (1).png" >
+        <img class="d-block w-100" id="post" src="img/postPic/<%= thispost.postPicture %>" >
   </div>
   <div class="userdata">
     <p class="data field">Creator</p>
@@ -20,6 +21,35 @@
     <p class="data desc">:</p>
     <p class="data desc"><%= thispost.Description %></p>
   </div>
+</div>
+<div class="container mt-5 mb-5">
+  <div class="d-flex justify-content-center row">
+      <div class="d-flex flex-column col-md-8">
+          <div class="d-flex flex-row align-items-center text-left comment-top p-2 bg-white border-bottom px-4">
+              
+          <div class="coment-bottom bg-white p-2 px-4">
+            <form  action="/comment/<%= thispost.Title %>" method="POST">
+              <div class="d-flex flex-row add-comment-section mb-4 w-75 ">
+                <img class="img-fluid img-responsive rounded-circle mr-2" src="" width="38">
+                <textarea class="form-control textarea" id="validationTextarea" placeholder="Add comment" rows="1" columns = "5" name = "comment"
+                    required></textarea>
+                <button class="btn btn-primary">Comment</button>
+              </div>
+              </form>
+              <% for(var i = 0; i < comments.length; i++){ %>
+              <div class="commented-section mt-2">
+                  <div class="d-flex flex-row align-items-center commented-user">
+                      <h5 class="mr-2"><%= comments[i].Name %> </h5></div>
+                  <div class="comment-text-sm"><span><%= comments[i].Comment %></span></div>
+            
+      </div>
+      <% } %>
+    </div>
+
+</div>
+
+</div>
+</div>
 </div>
   <%- include("partials/footer") -%>
   </body>

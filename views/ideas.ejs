@@ -1,24 +1,48 @@
 <%- include("partials/boiler") -%>
-  <link rel="stylesheet" href="/css/ideas.css">
+  <link rel="stylesheet" href="\css/ideas.css">
   <%- include("partials/header") -%>
     <div class = "ideas-container">
         <span class = "container-heading">IDEAS</span>
         <button class = "add-post" onclick="openForm()">ADD IDEA</button>
         <div class = "main-container">
+            <div>
             <div class = "left-container">
                 <% for(var i = 0; i < allIdeas.length; i++){ %>
                 <div class = "containers">
                     <div class = "text-content">
-                        <h5><%= allIdeas[i].Title %></h5>
-                        <p><%= allIdeas[i].Description.substring(0, 100) %><a class="pop-up-button"><span>..Read more</span></a></p>
+                        <h5 id="title"><%= allIdeas[i].Title %></h5>
+                        <p id="text"><%= allIdeas[i].Description.substring(0, 100) %><a class="pop-up-button"><span>..Read more</span></a></p>
                     </div>
                     <br>
-                    <h6>Created by <%= allIdeas[i].Username %></h6>
+                    <h6>Created by <a href="/profile/<%= allIdeas[i].Username %>"> <%= allIdeas[i].Username %> </a></h6>
                     <h7>Date Posted : <%= allIdeas[i].Date %></h7>
                 </div>
+
                 <% } %>
             </div>
-            
+            <div class="pagination">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                  <li class="page-item">
+                    <a class="page-link pageno" href="/ideas/?p=<%= previous %>" aria-label="Previous">
+                      <span aria-hidden="true">&laquo;</span>
+                      <span class="sr-only">Previous</span>
+                    </a>
+                  </li>
+                  <% for(var i = 0; i < 10; i++){ %>
+                  <li class="page-item"><a class="page-link pageno" href="/ideas/?p=<%= i %>" ><%= i+1 %></a></li>
+                  <% } %>
+                  <li class="page-item">
+                    <a class="page-link pageno" href="/ideas/?p=<%= next %>" aria-label="Next">
+                      <span aria-hidden="true">&raquo;</span>
+                      <span class="sr-only">Next</span>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+
+            </div>
+        </div>
             <div class = "fltr-container">
                 <form action="/filter_ideas" method="POST">
                 <ul type = "none" class = "filter-list">

@@ -65,6 +65,8 @@ const Post = require("./models/post.model");
 const { profileEnd } = require("console");
 const Event = require("./models/event.model");
 const Ideas = require("./models/ideas.model");
+const Comments = require("./models/comments.model");
+const { resourceLimits } = require("worker_threads");
 
 var pastEvents = [];
 var liveEvents = [];
@@ -164,14 +166,45 @@ app.get("/", async function (req, res) {
 });
 
 app.get("/ideas", async function (req, res) {
-    all = await Ideas.find({});
-    res.render("ideas", allIdeas = all);
+
+    const page = req.query.p || 0;
+    const ideasPerPage = 6;
+    console.log(page);
+    try{
+    // const all = await Ideas.find({});
+    // const NoOfPages = all.length/4;
+    const ideas_on_page = await Ideas.find()
+    .skip(page*ideasPerPage)
+    .limit(ideasPerPage)
+    console.log(ideas_on_page);
+    res.render("ideas", {allIdeas:ideas_on_page, next:page+1, previous:page-1});
+    }
+    catch(err){
+        console.log(err);
+    }
+
 });
 
-app.get("/filter_ideas/:filter", async function (req, res) {
-    const all = await Ideas.find({ Category: req.params.filter });
-    res.render("ideas", allIdeas = all);
+app.get("/filter_ideas/:filter", async function (req,res){
+    const page = req.query.p || 0;
+    const ideasPerPage = 6;
+    console.log(page);
+    try{
+    // const all = await Ideas.find({});
+    // const NoOfPages = all.length/4;
+    const ideas_on_page = await Ideas.find({Category: req.params.filter})
+    .skip(page*ideasPerPage)
+    .limit(ideasPerPage)
+    console.log(ideas_on_page);
+    res.render("ideas", {allIdeas:ideas_on_page, next:page+1, previous:page-1});
+    }
+    catch(err){
+        console.log(err);
+    }
+    // const all = await Ideas.find({Category: req.params.filter});
+    // res.render("ideas", allIdeas = all);
 })
+
 app.get("/login", function (req, res) {
     // console.log(req.flash('errors'));
     res.render('login', errors = req.flash('errors'));
@@ -216,10 +249,9 @@ app.get("/contactUs", function (req, res) {
 
 app.get("/post_details/:postTitle", async function (req, res) {
     const post = await Post.findOne({ Title: req.params.postTitle });
-
-    res.render("post_details", thispost = post);
+    const comment = await Comments.find({PostId : req.params.postTitle})
+    res.render("post_details", {thispost:post, comments:comment});
 });
-
 
 app.get("/myprofile/:username", requireAuth, async function (req, res) {
     console.log(req.params.username)
@@ -338,6 +370,27 @@ app.post("/signup", async (req, res) => {
     }
 });
 
+app.post("/comment/:posttitle", async (req, res)=>{
+    const token = req.cookies.jwt;
+    const url = "/post_details/" + req.params.posttitle;
+    jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
+        if (err) {
+            console.log(err);
+            res.redirect(url);
+        }
+        else {
+            let user = await Profile.findById(decodedToken.id);
+
+        const comment = await Comments.create({
+            Name: user.Name,
+            Comment: req.body.comment,
+            PostId: req.params.posttitle,
+            Date: Date.now()
+        });
+        res.redirect(url);
+    }
+});
+})
 app.post("/addIdeas", async (req, res) => {
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');

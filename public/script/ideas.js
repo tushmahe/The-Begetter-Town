@@ -1,5 +1,7 @@
 
 // Add Idea pop up
+let text1 = document.getElementById("title").innerText;
+let text2 = document.getElementById("text").innerText;
 function openForm() {
     const overlayItem = document.createElement('div');
     overlayItem.classList.add('overlay');
@@ -23,11 +25,11 @@ document.querySelector('.pop-up-button').addEventListener('click',function(){
   popUpcross.classList.add('pop-up-cross');
 
   const popUpHeader = document.createElement('span');
-  popUpHeader.textContent = "HEY THERE";
+  popUpHeader.textContent = text1;
   popUpHeader.classList.add('pop-up-header');
 
   const popUpcontent = document.createElement('span');
-  popUpcontent.textContent = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum";
+  popUpcontent.textContent = text2;
   popUpcontent.classList.add('pop-up-content');
 
 
