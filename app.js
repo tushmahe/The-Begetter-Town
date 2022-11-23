@@ -13,6 +13,9 @@ const { requireAuth, checkUser, checkAdmin } = require('./middleware/auth');
 const nodemailer = require('nodemailer');
 const formidable = require('formidable');
 const fileUpload = require("express-fileupload");
+const flash = require('connect-flash');
+const session = require('express-session');
+const window = require('window');
 
 
 const transporter = nodemailer.createTransport({
@@ -30,6 +33,12 @@ const JWT_SECRET = "uilfyvas4563677^$%&yufvy^T&YUVH&^vjuvgutcuk^&UVf&^FuVUfo6^vl
 
 app.set('view engine', 'ejs');
 
+app.use(session({
+    secret: 'codeforgeek',
+    saveUninitialized: true,
+    resave: true
+}));
+
 app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(express.static("public"));
 app.use(express.static(__dirname + "/public"));
@@ -37,6 +46,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(fileUpload());
+app.use(flash());
+
+app.use(function(req, res, next){
+    res.locals.message = req.flash();
+    next();
+});
 
 const conn = mongoose.connect("mongodb://localhost:27017/theBegetterTownDB", {
     useNewUrlParser: true,
@@ -133,7 +148,7 @@ async function getEvents(){
     // console.log(events);
 
     // return events;
-    console.log(upcomingEvents);
+    // console.log(upcomingEvents);
     return;
 }
 
@@ -145,7 +160,7 @@ app.get("/", async function (req, res) {
 
     const all = await Post.find({});
 
-    res.render("index", {allPosts: all, upcoming: upcomingEvents});
+    res.render("index.ejs", {allPosts: all, upcoming: upcomingEvents});
 });
 
 app.get("/ideas", async function (req, res) {
@@ -158,8 +173,9 @@ app.get("/filter_ideas/:filter", async function (req,res){
     res.render("ideas", allIdeas = all);
 })
 app.get("/login", function (req, res) {
-    res.render("login");
-});;
+    console.log(req.flash('errors'));
+    res.render('login', errors = req.flash('errors'));
+});
 
 
 app.get("/aboutUs", function (req, res) {
@@ -389,6 +405,7 @@ app.post("/contactUs", async (req, res) => {
 })
 
 app.post("/login", async (req, res) => {
+    // console.log(req.flash('success'));
     const username = req.body.username;
     const password = req.body.password;
     const user = await Profile.findOne({ Username: username });
@@ -408,9 +425,10 @@ app.post("/login", async (req, res) => {
             );
 
             res.cookie('jwt', token, { maxAge: 100000000000 });
-            console.log("Logged in successfully");
-
             res.redirect("/");
+            // console.log("Logged in successfully");
+
+            // window.location.assign('/')
 
             // res.redirect("http://localhost:3000");
         }
@@ -421,7 +439,15 @@ app.post("/login", async (req, res) => {
         // res.send("incorrect password");
     }
     else {
-        res.send("incorrect username");
+        req.flash('errors', `Please enter the correct username`);
+        res.locals.message = req.flash();
+
+        // req.session.save(function(){
+        //     res.redirect("/login");
+        // })
+        res.redirect("/login");
+        // console.log("wrong username");
+        // res.redirect("/login");
     }
 });
 
