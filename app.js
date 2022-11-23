@@ -26,6 +26,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+var flag=1;
 const app = express();
 
 const JWT_SECRET = "uilfyvas4563677^$%&yufvy^T&YUVH&^vjuvgutcuk^&UVf&^FuVUfo6^vlufO&^foVUvOUIBG78g7O06f7((^&%R&%$e64#W&^5";
@@ -163,12 +164,14 @@ app.get("/", async function (req, res) {
 });
 
 app.get("/ideas", async function (req, res) {
-    const all = await Ideas.find({});
-
-    console.log(all);
+    all = await Ideas.find({});
     res.render("ideas", allIdeas = all);
 });
 
+app.get("/filter_ideas/:filter", async function (req,res){
+    const all = await Ideas.find({Category: req.params.filter});
+    res.render("ideas", allIdeas = all);
+})
 app.get("/login", function (req, res) {
     // console.log(req.flash('errors'));
     res.render('login', errors = req.flash('errors'));
@@ -190,9 +193,12 @@ app.get("/events", async function (req, res) {
 
     res.render("events", {past: pastEvents, live: liveEvents, upcoming: upcomingEvents});
 });
-// app.get("/ideas", function (req, res) {
-//     res.render("ideas");
-// });
+app.get("/explore_by_category/:category", async function (req, res) {
+    // console.log(req.params.category);
+    const cate = await Post.find({Category: req.params.category});
+    // console.log(cate);
+    res.render("categories", {posts : cate, postcategory : req.params.category});
+});
 
 
 app.get("/contactUs", function (req, res) {
@@ -247,7 +253,16 @@ app.get("/add_post", requireAuth, async function (req, res) {
 
 });
 
-
+app.post("/filter_ideas", async (req, res)=> {
+    var filter = req.body.filter;
+    console.log(filter);
+    var url = "filter_ideas/" + filter;
+    if(filter!=null){
+       res.redirect(url);
+    }else{
+        res.redirect("/ideas");
+    }
+})
 app.post("/signup", async (req, res) => {
     var TypeOfUser;
     if (req.body.creator == 1) {

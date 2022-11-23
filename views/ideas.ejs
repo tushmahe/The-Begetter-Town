@@ -3,6 +3,7 @@
   <%- include("partials/header") -%>
     <div class = "ideas-container">
         <span class = "container-heading">IDEAS</span>
+        <button class = "add-post" onclick="openForm()">ADD IDEA</button>
         <div class = "main-container">
             <div class = "left-container">
                 <% for(var i = 0; i < allIdeas.length; i++){ %>
@@ -17,34 +18,36 @@
                 </div>
                 <% } %>
             </div>
-            <div class = "brdr-container"></div>
+            
             <div class = "fltr-container">
+                <form action="/filter_ideas" method="POST">
                 <ul type = "none" class = "filter-list">
                     <li class = "filter-list-items">
                         <span class ="filter-heading">FILTERS</span>
                     </li>
                     <li class = "filter-list-items">
-                        <input type = "checkbox">
+                        <input class="form-check-input" name = "filter" value = "Paintings" type="radio" id="flexRadioDefault1" >
                         <span>PAINTINGS</span>
                     </li>
                     <li class = "filter-list-items">
-                        <input type = "checkbox">
+                        <input class="form-check-input" name = "filter" value = "Photography" type="radio" id="flexRadioDefault1">
                         <span>PHOTOGRAPHY</span>
                     </li>
                     <li class = "filter-list-items">
-                        <input type = "checkbox">
+                        <input class="form-check-input" name = "filter" value = "Jewellery" type="radio" id="flexRadioDefault1">
                         <span>JEWELLERY</span>
                     </li>
                     <li class = "filter-list-items">
-                        <input type = "checkbox">
+                        <input class="form-check-input" name = "filter" value = "Handicraft" type="radio" id="flexRadioDefault1">
                         <span>HANDICRAFT</span>
                     </li>
                     <li class = "filter-list-items">
-                        <input type = "checkbox">
+                        <input class="form-check-input" name = "filter" value = "Fashion" type="radio" id="flexRadioDefault1">
                         <span>FASHION</span>
                     </li>
+                    <button class="filter">Filter</button>
                 </ul>
-                <button class = "add-post" onclick="openForm()">ADD IDEA</button>
+            </form>
             </div>
         </div>
     </div> 
