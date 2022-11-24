@@ -1,71 +1,73 @@
-    <% if(!otheruser) { %>
-    <h2>HI <%= user.Name %></h2>
-    <% } else { %>
-      <h2>Say hi to <%= otheruser.Name %></h2>
-      <% } %>
+<% if(!otheruser) { %>
+  <h2>HI <%= user.Name %>
+  </h2>
+  <% } else { %>
+    <h2>Say hi to <%= otheruser.Name %>
+    </h2>
+    <% } %>
 
 
-    <div class="dash">
-      <nav class="navbar sidenavbar">
+      <div class="dash">
+        <nav class="navbar sidenavbar">
 
-        <!-- Links -->
-        <ul class="navbar-nav links">
+          <!-- Links -->
+          <ul class="navbar-nav links">
 
-          <li class="nav-item">
-            <% if(!otheruser) { %>
-            <a class="nav-link nav1" href="/myprofile/<%= user.Username %>">MY PROFILE</a>
-            <hr class="line">
-            <% } else { %>
-              <a class="nav-link nav1" href="/myprofile/<%= otheruser.Username %>">MY PROFILE</a>
-              <hr class="line">
-              <% } %>
-          </li>
-
-          <li class="nav-item">
-            <% if(!otheruser) { %>
-            <a class="nav-link nav1" href="/mypost/<%= user.Username %>">MY POSTS</a>
-            <hr class="line">
-             <% } else { %>
-              <a class="nav-link nav1" href="/mypost/<%= otheruser.Username %>">MY POSTS</a>
-              <hr class="line">
-              <% } %> 
-
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link nav1" href="#">MY IDEAS</a>
-            <hr class="line">
-          </li>
-        
-          <li class="nav-item">
-            <% if(otheruser.Username==user.Username) { %>
-            <a class="nav-link nav1" href="/add_post">ADD POST</a>
-            <hr class="line">
-            <% } else { %>
-            
-              <% } %> 
-           
-            
-              <!-- <a class="nav-link nav1" style="visibility:hidden"  href="/add_post">ADD POST</a>
-              <hr class="line"> -->
-        
+            <li class="nav-item">
+              <% if(!otheruser) { %>
+                <a class="nav-link nav1" href="/myprofile/<%= user.Username %>">MY PROFILE</a>
+                <hr class="line">
+                <% } else { %>
+                  <a class="nav-link nav1" href="/myprofile/<%= otheruser.Username %>">MY PROFILE</a>
+                  <hr class="line">
+                  <% } %>
             </li>
-       
-          <li class="nav-item">
-            <a class="nav-link nav1" href="/qr/<%= user.Username %>">VIEW QR</a>
-            <hr class="line">
-          </li>
-          <li class="nav-item">
-            <% if(!otheruser) { %>
-            <a class="nav-link nav1" href="/contact_info/<%= user.Username %>">CONTACT INFO</a>
-            <% } else { %>
-            <a class="nav-link nav1" href="/contact_info/<%= otheruser.Username %>">CONTACT INFO</a>
-            <% } %>
-          </li>
-        </ul>
 
-      </nav>
+            <li class="nav-item">
+              <% if(!otheruser) { %>
+                <a class="nav-link nav1" href="/mypost/<%= user.Username %>">MY POSTS</a>
+                <hr class="line">
+                <% } else { %>
+                  <a class="nav-link nav1" href="/mypost/<%= otheruser.Username %>">MY POSTS</a>
+                  <hr class="line">
+                  <% } %>
+
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link nav1" href="#">MY IDEAS</a>
+              <hr class="line">
+            </li>
+
+            <li class="nav-item">
+              <% if(user && otheruser.Username==user.Username) { %>
+                <a class="nav-link nav1" href="/add_post">ADD POST</a>
+                <hr class="line">
+                <% } else { %>
+
+                  <% } %>
+
+            </li>
+
+            <li class="nav-item">
+              <% if(!otheruser) { %>
+                <a class="nav-link nav1" href="/qr/<%= user.Username %>">VIEW QR</a>
+                <% } else { %>
+                  <a class="nav-link nav1" href="/qr/<%= otheruser.Username %>">VIEW QR</a>
+                  <% } %>
+                    <hr class="line">
+            </li>
+            <li class="nav-item">
+              <% if(!otheruser) { %>
+                <a class="nav-link nav1" href="/contact_info/<%= user.Username %>">CONTACT INFO</a>
+                <% } else { %>
+                  <a class="nav-link nav1" href="/contact_info/<%= otheruser.Username %>">CONTACT INFO</a>
+                  <% } %>
+            </li>
+          </ul>
+
+        </nav>
 
 
-      <div class="vertical_line">
+        <div class="vertical_line">
         </div>

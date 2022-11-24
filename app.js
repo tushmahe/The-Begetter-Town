@@ -221,11 +221,16 @@ app.get("/post_details/:postTitle", async function (req, res) {
 });
 
 
-app.get("/myprofile/:username", requireAuth, async function (req, res) {
-    console.log(req.params.username)
-    const linkuser = await Profile.findOne({ Username: req.params.username });
-    res.render("dashboard", otheruser = linkuser);
-});
+// app.get("/myprofile/:username", async function (req, res) {
+//     console.log(req.params.username)
+//     const linkuser = await Profile.findOne({ Username: req.params.username });
+//     res.render("dashboard", otheruser = linkuser);
+// });
+
+app.get("/myprofile/:username", async function(req, res){
+    const linkuser = await Profile.findOne({Username: req.params.username});
+    res.render("profile");
+})
 
 
 app.get("/contact_info/:username", async function (req, res) {
@@ -237,7 +242,7 @@ app.get("/contact_info/:username", async function (req, res) {
 
 app.get("/add_post", requireAuth, async function (req, res) {
 
-    res.render("add_post");
+    res.render("add_post_new");
 });
 
 app.post("/filter_ideas", async (req, res) => {

@@ -1,20 +1,28 @@
-<link rel="stylesheet" href="css/navbar.css">
+<link rel="stylesheet" href="/css/navbar.css">
+<script type="text/javascript" src="/script/menu.js"></script>
 </head>
 
 
 <body>
   <nav class="navbar navbar-light" id="navbar1">
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand" href="/">
       <img src="/img/TBT.png" width="250" height="110" alt="" class="tbtlogo">
     </a>
+
     <% if(!user) { %>
       <div class="login_signup">
-        <a href="/login" class="login">Login</a><a>|</a><a href="/signup" class="login">Sign Up</a>
+        <a href="/login" class="login">LOGIN</a><a>|</a><a href="/signup" class="login">SIGN UP</a>
       </div>
       <% } else { %>
-        <div class="login_signup">
-          <a href="/logout" class="login">Logout</a><a>|</a><a href="/myprofile/<%= user.Username %>" class="login">Dashboard</a>
+        <div class = "dashboard_logout">
+        <a class="glow-on-hover" href = "/myprofile/<%= user.Username %>">DASHBOARD</a>
+        <a class = "logout">|</a>
+        <a class = "login logout" href = "/logout">LOG OUT</a>
         </div>
+
+        <!-- <div class="login_signup">
+          <a href="/logout" class="login">Logout</a><a>|</a><a href="/myprofile/<%= user.Username %>" class="login">Dashboard</a>
+        </div> -->
         <% } %>
   </nav>
 
@@ -24,8 +32,8 @@
         <li class="nav-item nav_item">
           <a class="nav-link nav_link" href="/">EXPLORE</a>
         </li>
-        <li class="nav-item nav_item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+        <li class="nav-item nav_item">
+          <!-- <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
             EXPLORE BY CATEGORY
           </a>
@@ -35,6 +43,16 @@
             <a class="dropdown-item" href="/explore_by_category/Jewellery">JEWELLERY</a>
             <a class="dropdown-item" href="/explore_by_category/Fashion">FASHION</a>
             <a class="dropdown-item" href="/explore_by_category/Photography">PHOTOGRAPHY</a>
+          </div> -->
+          <div class="bydropdown">EXPLORE BY CATEGORY
+            <ul class="bydropdown-menu">
+              <li><a href="/explore_by_category/Paintings">PAINTINGS</a></li>
+              <li><a href="/explore_by_category/Handicraft">HANDICRAFTS</a></li>
+              <li><a href="/explore_by_category/Jewellery">JEWELLERY</a></li>
+              <li><a href="/explore_by_category/Fashion">FASHION</a></li>
+              <li><a href="/explore_by_category/Photography">PHOTOGRAPHY</a></li>
+
+            </ul>
           </div>
         </li>
         <li class="nav-item nav_item">
