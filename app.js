@@ -21,12 +21,11 @@ const qr = require('qrcode')
 const transporter = nodemailer.createTransport({
     service: 'hotmail',
     auth: {
-        user: 'tushmaheshwari@outlook.com',
-        pass: 'Tushmahe@123'
+        user: 'the_begetter_town@outlook.com',
+        pass: 'tbt@1234'
     }
 });
 
-var flag = 1;
 const app = express();
 
 const JWT_SECRET = "uilfyvas4563677^$%&yufvy^T&YUVH&^vjuvgutcuk^&UVf&^FuVUfo6^vlufO&^foVUvOUIBG78g7O06f7((^&%R&%$e64#W&^5";
@@ -428,7 +427,7 @@ app.post("/contactUs", async (req, res) => {
         var email = req.body.email;
         var msg = req.body.message;
         const options = {
-            from: 'tushmaheshwari@outlook.com',
+            from: 'the_begetter_town@outlook.com',
             to: 'tushmaheshwari28@gmail.com',
             subject: 'Message from The Begetter Town',
             text: `Name : ${name}
@@ -439,8 +438,9 @@ app.post("/contactUs", async (req, res) => {
         transporter.sendMail(options, function (err, info) {
             if (err) {
                 console.log(err);
+            }else{
+            console.log("done mail");
             }
-            console.log("Sent : " + info.response);
         })
     } catch (error) {
         res.status(400).send("Error occured");
