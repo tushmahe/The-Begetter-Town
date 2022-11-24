@@ -1,6 +1,9 @@
 <%- include("partials/boiler") -%>
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="/css/cardstyle.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Signika+Negative:wght@400;700&display=swap" rel="stylesheet">
 
   <%- include("partials/header") -%>
 
@@ -39,37 +42,24 @@
       </div>
     </div>
 
-    <p class="explore"><u>SOME FRESH CREATIONS FOR YOU</u></p>
+    <p class="explore" style="font-family: 'Fredoka One', cursive; font-size: 40px; color: rgba(0, 0, 0, 68%); margin-bottom: 5rem;;;"><u>SOME FRESH CREATIONS FOR YOU</u></p>
     <div class="cards">
       <% for(var i = 0; i < allPosts.length; i++){ %>
-      <div class="card">
-        <img class="card-img-top" src="img/postPic/<%= allPosts[i].postPicture %>" alt="Card image cap">
-        <div class="card-body mb-4 card_content">
-          <h3 class="card_title"><%= allPosts[i].Title %></h3>
-          <span class="card_subtitle">Created By: <a href="/profile/<%= allPosts[i].Username %>" style="color:blue;"><%= allPosts[i].Username %></a></span>
-          <p class="card-text card_description"><%=allPosts[i].Description.substring(0, 90)%><br><a href="/post_details/<%= allPosts[i].Title %>">Read more</a></p>
+        <div class="card" style="border: 10px; border-color: black;">
+          <img class="card-img-top" src="img/postPic/<%= allPosts[i].postPicture %>" alt="Card image cap">
+          <div class="card-body mb-4 card_content">
+            <h3 class="card_title" style="margin-bottom:20px; "><%= allPosts[i].Title %></h3>
+            <span class="card_subtitle" style="font-size: 15px; font-weight: bold;">Created By: <a href="/profile/<%= allPosts[i].Username %>" style="color:blue;"><%= allPosts[i].Username %></a></span>
+            <p class="card-text card_description" ;;><%=allPosts[i].Description.substring(0, 90)%><br><a href="/post_details/<%= allPosts[i].Title %>">Read more</a></p>
+          </div>
         </div>
-      </div>
       <% } %>
     </div>
     <div class="aboutUs" id="About_us">
-      <h2>ABOUT US</h2>
-      <p class="aboutustext">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam quis dui lobortis, mattis
-        massa pellentesque, tristique
-        nunc. Fusce facilisis iaculis tincidunt. Nullam placerat quam consectetur, ornare eros eleifend, accumsan augue.
-        In
-        consequat molestie ligula eget aliquam. In eget nisl sed urna pharetra porta. Orci varius natoque penatibus et
-        magnis
-        dis parturient montes, nascetur ridiculus mus. Nullam convallis feugiat massa, nec ornare felis bibendum eu.
-        Fusce in
-        urna vel augue condimentum ornare. Fusce eu facilisis dolor. Maecenas a suscipit velit, quis volutpat magna. In
-        quis
-        nisl nibh.
-        In gravida auctor tempor. Maecenas nisi mauris, faucibus fermentum porta ac, finibus sed nisi. Mauris fermentum
-        pretium diam eget mollis. Pellentesque ultrices lacus nec lorem convallis facilisis. Integer justo augue, cursus
-        et
-        massa sed, interdum mattis purus. Curabitur imperdiet tortor ac lorem egestas placerat. Nulla quis ex quis quam
-        egestas scelerisque. Vestibulum fringilla volutpat elit, eget condimentum dui tincidunt</p>
+      <h2 style="font-family: 'Fredoka One', cursive; font-size: 30px; color: rgba(35, 34, 34, 0.537);">ABOUT US</h2>
+      <p class="aboutustext">
+        We aim to provide local artists and creators, who have just begun their career and need a platform where they can present and showcase their own creations to the public because having individual platforms for this purpose at the very beginning stage can lead to high investment. The main motivation is to create common platform where creators can post their own creations, the public can view the creations and contact the creators according to their own interest and awareness about upcoming/past events is available can really be helpful. We also hope to add a payment section to the website so as to promote e-commerce between users and creators.
+      </p>
     </div>
 
     <%- include("partials/footer") -%>
