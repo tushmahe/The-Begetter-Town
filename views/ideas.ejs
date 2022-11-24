@@ -15,12 +15,12 @@
                 <% for(var i = 0; i < allIdeas.length; i++){ %>
                 <div class = "containers">
                     <div class = "text-content">
-                        <h5 id="title"><%= allIdeas[i].Title %></h5>
+                        <h5 id="title" style = "font-family: 'Fredoka One', cursive;"><%= allIdeas[i].Title %></h5>
                         <p id="text"><%= allIdeas[i].Description.substring(0, 100) %><a class="pop-up-button"><span>..Read more</span></a></p>
                     </div>
                     <br>
-                    <h6>Created by <a href="/profile/<%= allIdeas[i].Username %>"> <%= allIdeas[i].Username %> </a></h6>
-                    <h7>Date Posted : <%= allIdeas[i].Date %></h7>
+                    <h6 style="font-family: 'Space Grotesk', sans-serif;">Created by <a href="/profile/<%= allIdeas[i].Username %>"> <%= allIdeas[i].Username %> </a> | Date Posted : <%= allIdeas[i].Date %></h6>
+                    <!-- <h7>Date Posted : <%# allIdeas[i].Date %></h7> -->
                 </div>
 
                 <% } %>

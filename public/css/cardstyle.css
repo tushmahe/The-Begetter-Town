@@ -12,7 +12,7 @@
 .card_content{
     position: absolute;
     left: 0;
-    bottom: 0;
+    bottom: -27px;
     width: 100%;
     padding: 20px;
     background-color: #fff;
@@ -24,7 +24,7 @@
 .card_content::before{
     content: '';
     position: absolute;
-    top: -47px;
+    top: -30px;
     right: -45px;
     width: 100px;
     height: 100px;
