@@ -47,7 +47,7 @@
                                 <p>Add Post</p>
                             </div>
                         </a>
-                        <a>
+                        <a href = "/qr/<%= user.Username %>">
                             <div class = "link">
                                 <i class="fa-solid fa-qrcode"></i>
                                 <p>View QR</p>
@@ -83,4 +83,5 @@
                 $('[data-toggle="popover"]').popover();
             });
         </script>
+        <%- include("partials/footer") -%>
         </body>

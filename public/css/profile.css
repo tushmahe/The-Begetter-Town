@@ -30,10 +30,11 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: white;
-    width: 65rem;
+    background-color: #fefbf3;
+    width: 75rem;
     border-radius: 1rem;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.397), 0 6px 20px 0 rgba(0, 0, 0, 0.847);
+    margin-bottom: 4rem;
 }
 
 .name {
@@ -51,15 +52,19 @@ body {
 .link {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
     margin-left: 2rem;
     margin-right: 2rem;
     margin-top: 2rem;
     padding: 1rem;
+
+    /* box-shadow:inset 0 -0.6em 1em -0.35em rgba(0,0,0,0.17),inset 0 0.6em 2em -0.3em rgba(255,255,255,0.15),inset 0 0 0em 0.05em rgba(255,255,255,0.12); */
 }
 
 .link:hover{
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.397), 0 6px 20px 0 rgba(0, 0, 0, 0.847);
+    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.397), 0 6px 20px 0 rgba(0, 0, 0, 0.847); */
+    box-shadow:inset 0 0.6em 2em -0.3em rgba(0,0,0,0.15),inset 0 0 0em 0.05em rgba(255,255,255,0.12);
     border-radius: 1rem;
     background-color: #81c1c4;
 }
@@ -79,4 +84,22 @@ body {
     margin-top: 2rem;
     font-family: 'Alegreya Sans SC', sans-serif;
     font-size: 1.5rem;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-content:center;
+    align-items: center;
+}
+.card{
+    margin: 2rem 4rem;
+    width: 18rem;
+}
+
+.qr{
+    margin-top: 2rem;
+    width: 15rem;
+    height: 15rem;
+    margin-bottom: 4rem;
 }

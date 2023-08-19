@@ -24,7 +24,7 @@
     bottom: 0;
     width: 100%;
     height: 2px;
-    background-color: #17a2b8;
+    background-color: #81c1c4;
     transform: scaleX(0);
     transform-origin: right;
     transition: transform .5s;

@@ -24,7 +24,7 @@ const postSchema = mongoose.Schema({
 
     postPicture: {
         type: String,
-    }
+    },
 
 });
 

@@ -21,12 +21,11 @@ const qr = require('qrcode')
 const transporter = nodemailer.createTransport({
     service: 'hotmail',
     auth: {
-        user: 'tushmaheshwari@outlook.com',
-        pass: 'Tushmahe@123'
+        user: 'the_begetter_town@outlook.com',
+        pass: 'tbt@1234'
     }
 });
 
-var flag = 1;
 const app = express();
 
 const JWT_SECRET = "uilfyvas4563677^$%&yufvy^T&YUVH&^vjuvgutcuk^&UVf&^FuVUfo6^vlufO&^foVUvOUIBG78g7O06f7((^&%R&%$e64#W&^5";
@@ -53,18 +52,32 @@ app.use(function (req, res, next) {
     next();
 });
 
-const conn = mongoose.connect("mongodb://localhost:27017/theBegetterTownDB", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-    // useCreateIndex: true
-});
+// const conn = mongoose.connect("mongodb://localhost:27017/theBegetterTownDB", {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true
+//     // useCreateIndex: true
+// });
 
+MONGO_URL = "mongodb://127.0.0.1:27017/theBegetterTownDB";
+// mongoose.connect(
+//     process.env.MONGO_URL,
+//     { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true },
+//     () => {
+//       console.log('Connected to MongoDB');
+//     }
+//   );
+
+const conn = mongoose.connect(MONGO_URL, () => {
+    console.log("Mongoose connected");
+})
 
 const Profile = require("./models/profile.model");
 const Post = require("./models/post.model");
 const { profileEnd } = require("console");
 const Event = require("./models/event.model");
 const Ideas = require("./models/ideas.model");
+const Comments = require("./models/comments.model");
+const { resourceLimits } = require("worker_threads");
 
 var pastEvents = [];
 var liveEvents = [];
@@ -164,14 +177,45 @@ app.get("/", async function (req, res) {
 });
 
 app.get("/ideas", async function (req, res) {
-    all = await Ideas.find({});
-    res.render("ideas", allIdeas = all);
+
+    const page = req.query.p || 0;
+    const ideasPerPage = 6;
+    console.log(page);
+    try{
+    // const all = await Ideas.find({});
+    // const NoOfPages = all.length/4;
+    const ideas_on_page = await Ideas.find()
+    .skip(page*ideasPerPage)
+    .limit(ideasPerPage)
+    console.log(ideas_on_page);
+    res.render("ideas", {allIdeas:ideas_on_page, next:page+1, previous:page-1});
+    }
+    catch(err){
+        console.log(err);
+    }
+
 });
 
-app.get("/filter_ideas/:filter", async function (req, res) {
-    const all = await Ideas.find({ Category: req.params.filter });
-    res.render("ideas", allIdeas = all);
+app.get("/filter_ideas/:filter", async function (req,res){
+    const page = req.query.p || 0;
+    const ideasPerPage = 6;
+    console.log(page);
+    try{
+    // const all = await Ideas.find({});
+    // const NoOfPages = all.length/4;
+    const ideas_on_page = await Ideas.find({Category: req.params.filter})
+    .skip(page*ideasPerPage)
+    .limit(ideasPerPage)
+    console.log(ideas_on_page);
+    res.render("ideas", {allIdeas:ideas_on_page, next:page+1, previous:page-1});
+    }
+    catch(err){
+        console.log(err);
+    }
+    // const all = await Ideas.find({Category: req.params.filter});
+    // res.render("ideas", allIdeas = all);
 })
+
 app.get("/login", function (req, res) {
     // console.log(req.flash('errors'));
     res.render('login', errors = req.flash('errors'));
@@ -197,6 +241,7 @@ app.get("/explore_by_category/:category", async function (req, res) {
     getEvents();
     // console.log(req.params.category);
     const cate = await Post.find({ Category: req.params.category });
+    console.log(cate);
 
     var upcomingByCategory = [];
 
@@ -206,7 +251,7 @@ app.get("/explore_by_category/:category", async function (req, res) {
         }
     }
     // console.log(cate);
-    res.render("categories", { posts: cate, postcategory: req.params.category, upcoming: upcomingByCategory});
+    res.render("categories", { allPosts: cate, postcategory: req.params.category, upcoming: upcomingByCategory});
 });
 
 
@@ -215,9 +260,10 @@ app.get("/contactUs", function (req, res) {
 });
 
 app.get("/post_details/:postTitle", async function (req, res) {
-    const post = await Post.findOne({ Title: req.params.postTitle });
-
-    res.render("post_details", thispost = post);
+    const post = await Post.findOne({ Title: req.params.postTitle }, {_id: 0});
+    console.log(post);
+    const comment = await Comments.find({PostId : req.params.postTitle});
+    res.render("post_details", {thispost:post, comments:comment});
 });
 
 
@@ -228,14 +274,20 @@ app.get("/post_details/:postTitle", async function (req, res) {
 // });
 
 app.get("/myprofile/:username", async function(req, res){
-    const linkuser = await Profile.findOne({Username: req.params.username});
-    res.render("profile");
+    const linkuser = await Profile.findOne({Username: req.params.username}, {_id: 0});
+    const all = await Post.find({ Username: req.params.username });
+
+            // console.log(all);
+
+            // res.render("mypost", allPosts = all);
+
+    res.render("profile", {allPosts: all, otheruser: linkuser});
 })
 
 
 app.get("/contact_info/:username", async function (req, res) {
     console.log(req.params.username)
-    const linkuser = await Profile.findOne({ Username: req.params.username });
+    const linkuser = await Profile.findOne({ Username: req.params.username }, {setTimeout: 20000}, {_id: 0});
     res.render("contact_info", otheruser = linkuser);
 });
 
@@ -343,6 +395,27 @@ app.post("/signup", async (req, res) => {
     }
 });
 
+app.post("/comment/:posttitle", async (req, res)=>{
+    const token = req.cookies.jwt;
+    const url = "/post_details/" + req.params.posttitle;
+    jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
+        if (err) {
+            console.log(err);
+            res.redirect(url);
+        }
+        else {
+            let user = await Profile.findById(decodedToken.id);
+
+        const comment = await Comments.create({
+            Name: user.Name,
+            Comment: req.body.comment,
+            PostId: req.params.posttitle,
+            Date: Date.now()
+        });
+        res.redirect(url);
+    }
+});
+})
 app.post("/addIdeas", async (req, res) => {
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
@@ -380,7 +453,7 @@ app.post("/contactUs", async (req, res) => {
         var email = req.body.email;
         var msg = req.body.message;
         const options = {
-            from: 'tushmaheshwari@outlook.com',
+            from: 'the_begetter_town@outlook.com',
             to: 'tushmaheshwari28@gmail.com',
             subject: 'Message from The Begetter Town',
             text: `Name : ${name}
@@ -391,8 +464,9 @@ app.post("/contactUs", async (req, res) => {
         transporter.sendMail(options, function (err, info) {
             if (err) {
                 console.log(err);
+            }else{
+            console.log("done mail");
             }
-            console.log("Sent : " + info.response);
         })
     } catch (error) {
         res.status(400).send("Error occured");
@@ -404,9 +478,10 @@ app.post("/login", async (req, res) => {
     // console.log(req.flash('success'));
     const username = req.body.username;
     const password = req.body.password;
-    const user = await Profile.findOne({ Username: username });
+    const user = await Profile.findOne({ Username: username }, "Password");
 
     // console.log(user);
+    // console.log(user.Password);
 
     if (user) {
 
@@ -517,7 +592,7 @@ app.post("/add_post/:username", (req, res) => {
 
 app.post("/deletePost", async (req, res) => {
 
-    const thispost = await Post.findOne({ Title: req.body.title });
+    const thispost = await Post.findOne({ Title: req.body.title }, {_id: 0});
 
     console.log(thispost);
 
@@ -528,8 +603,10 @@ app.post("/deletePost", async (req, res) => {
 
 app.get("/profile/:username", async (req, res) => {
     console.log(req.params.username);
-    var creator = await Profile.findOne({ Username: req.params.username });
-    res.render("dashboard", otheruser = creator);
+    var creator = await Profile.findOne({ Username: req.params.username }, {_id: 0});
+    const all = await Post.find({ Username: req.params.username }, {_id: 0});
+
+    res.render("profile", {allPosts: all, otheruser:  creator});
 });
 
 app.get("/add_event", async (req, res) => {
@@ -574,7 +651,7 @@ app.post("/add_event", async (req, res) => {
 
 app.get("/qr/:username", async (req, res) => {
     const src = "/img/qrPic/" + req.params.username;
-    res.render("myqr", {user: req.params.username});
+    res.render("myqr", {username: req.params.username});
 });
 
 app.listen(3000, function () {

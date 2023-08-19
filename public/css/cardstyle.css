@@ -1,16 +1,18 @@
 .card {
     position: relative;
     width: 300px;
-    height: 400px;
+    height: 430px;
     background-size: cover;
     border-radius: 20px;
     overflow: hidden;
+    border:0px solid #0d0f11 !important;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 2px 12px 0 rgba(0, 0, 0, 0.19);
 }
 
 .card_content{
     position: absolute;
     left: 0;
-    bottom: 0;
+    bottom: -27px;
     width: 100%;
     padding: 20px;
     background-color: #fff;
@@ -22,7 +24,7 @@
 .card_content::before{
     content: '';
     position: absolute;
-    top: -47px;
+    top: -30px;
     right: -45px;
     width: 100px;
     height: 100px;
@@ -34,13 +36,17 @@
 
 .card_title{
     color: #6a515e;
-    line-height: 15px;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 23px;
+    line-height: 10px;
 }
 
 .card_subtitle{
     display: block;
     font-size: 12px;
-    margin-bottom: 10px;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* font-weight: lighter; */
+    margin-bottom: 0px;
 }
 
 .card_description{

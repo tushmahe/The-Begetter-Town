@@ -6,12 +6,13 @@
 
       <% if(!otheruser) { %>
         <div style="display:flex; justify-content:space-around;">
+        <div style="display:flex; justify-content:center;">
           <div>
             <img src="/img/profilePic/<%= user.ProfileImg %>" class="rounded-circle"
               style="width: 200px; position: relative; left:40rem;" alt="Avatar" />
           </div>
 
-          <div class="myprofile" style="position:absolute; right:25rem;">
+          <div class="myprofile" style="position:absolute; margin-left:3rem ; padding-left:0rem">
             <div class="userdata">
               <p class="data field">Name</p>
               <p class="data">:</p>
@@ -54,6 +55,10 @@
                 <%= user.FieldOfInterest %>
               </p>
             </div>
+            <div>
+              <img src="/img/profilePic/<%= user.ProfileImg %>" class="rounded-circle"
+                style="width: 200px; position: relative; left:40rem;;" alt="Avatar" />
+            </div>
           </div>
 
           <% } else { %>
@@ -66,42 +71,42 @@
             <div class="myprofile" style="position:absolute; right:25rem;">
               <div class="userdata">
                 <p class="data field">Name</p>
-                <p class="data">:</p>
+                <p class="">:</p>
                 <p class="data">
                   <%= otheruser.Name %>
                 </p>
               </div>
               <div class="userdata">
                 <p class="data field">Username</p>
-                <p class="data">:</p>
+                <p class="">:</p>
                 <p class="data">
                   <%= otheruser.Username %>
                 </p>
               </div>
               <div class="userdata">
                 <p class="data field">Email</p>
-                <p class="data">:</p>
+                <p class="">:</p>
                 <p class="data">
                   <%= otheruser.Email %>
                 </p>
               </div>
               <div class="userdata">
                 <p class="data field bio">Bio</p>
-                <p class="data">:</p>
+                <p class="">:</p>
                 <p class="data">
                   <%= otheruser.Bio %>
                 </p>
               </div>
               <div class="userdata">
                 <p class="data field">Country Region</p>
-                <p class="data">:</p>
+                <p class="">:</p>
                 <p class="data">
                   <%= otheruser.Country %>
                 </p>
               </div>
               <div class="userdata">
                 <p class="data field">Field of Interest</p>
-                <p class="data">:</p>
+                <p class="">:</p>
                 <p class="data">
                   <%= otheruser.FieldOfInterest %>
                 </p>

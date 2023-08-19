@@ -1,7 +1,7 @@
 <%- include("partials/boiler") -%>
   <link rel="stylesheet" href="/css/mypoststyles.css">
   <link rel="stylesheet" href="/css/sidebarstyles.css">
-  <link rel="stylesheet" href="/css/cardstyles.css">
+  <link rel="stylesheet" href="/css/cardstyle.css">
 
   <%- include("partials/header") -%>
     <%- include("partials/sidebar") -%>
@@ -12,22 +12,45 @@
           <div style="overflow-y: scroll;" class="eventcards">
             <div class="cards">
               <% for(var i=0; i < allPosts.length; i++) { %>
-                <div class="card">
+
+                <!-- <div class="card">
                   <form action="/deletePost" , method="POST">
                     <input type="text" class="inputfield" name="title" value="<%= allPosts[i].Title %>">
                     <button class="btn" type="submit">X</button>
                   </form>
                   <img class="card-img-top" src="/img/postPic/<%= allPosts[i].postPicture %>" alt="Card image cap">
-                  <div class="card-body mb-4">
-                    <p>
+                  <div class="card-body mb-4 card_content">
+                    <p class="card_title">
                       <%= allPosts[i].Title %>
                     </p>
-                    <p class="card-text">
+                    <p class="card-text card_description">
                       <%= allPosts[i].Description.substring(0, 100) %><br><a href="#">Read more</a>
                     </p>
                    <a href=""><%= allPosts[i].Username %></a>
                   </div>
+                </div> -->
+     
+                <!-- <div class="card" style="border: 10px; border-color: black;">
+                  <img class="card-img-top" src="img/postPic/<%= allPosts[i].postPicture %>" alt="Card image cap">
+                  <div class="card-body mb-4 card_content">
+                    <h3 class="card_title" style="margin-bottom:20px;font-size: 35px; "><%= allPosts[i].Title %></h3>
+                    <span class="card_subtitle" style="font-size: 20px;; font-weight: bold;">Created By: <a href="/profile/<%= allPosts[i].Username %>" style="color:blue;"><%= allPosts[i].Username %></a></span>
+                    <p class="card-text card_description" style="font-size: 18px";;><%=allPosts[i].Description.substring(0, 90)%><br><a href="/post_details/<%= allPosts[i].Title %>">Read more</a></p>
+                  </div>
+                </div> -->
+
+                <div class="card">
+                  <form action="/deletePost" , method="POST">
+                    <input type="text" class="inputfield" name="title" value="<%= allPosts[i].Title %>">
+                    <button class="btn" type="submit">X</button>
+                  </form>
+                  <img class="card-img-top" src="img/postPic/<%= allPosts[i].postPicture %>" alt="Card image cap">
+                  <div class="card-body mb-4 card_content">
+                    <h3 class="card_title" style="margin-bottom:20px;"><%= allPosts[i].Title %></h3>
+                    <p class="card-text card_description"><%=allPosts[i].Description.substring(0, 90)%><br><a href="/post_details/<%= allPosts[i].Title %>">Read more</a></p>
+                  </div>
                 </div>
+
                 <% } %>
             </div>
           </div>

@@ -1,5 +1,7 @@
 <%- include("partials/boiler") -%>
     <link rel="stylesheet" href="/css/profile.css">
+    <link rel="stylesheet" href="/css/cardstyle.css">
+
     <!-- <link rel="stylesheet" href="/css/sidebarstyles.css"> -->
     <%- include("partials/header") -%>
 
@@ -7,6 +9,7 @@
 
         <div class="parent_container">
             <div class="cont">
+                <% if(!otheruser){ %>
                 <div class="pic">
                     <img src="/img/profilePic/<%= user.ProfileImg %>" alt="Profile picture" class="profile_pic">
                 </div>
@@ -45,14 +48,90 @@
                                 <p>Add Post</p>
                             </div>
                         </a>
-                        <a>
+                        <a href = "/qr/<%= user.Username %>">
                             <div class = "link">
                                 <i class="fa-solid fa-qrcode"></i>
                                 <p>View QR</p>
                             </div>
                         </a>
                     </div>
+
+                    <div class="cards">
+                        <% for(var i = 0; i < allPosts.length; i++){ %>
+                          <div class="card" style="border: 00px; border-color: black;">
+                            <img class="card-img-top" src="/img/postPic/<%= allPosts[i].postPicture %>" alt="Card image cap">
+                            <div class="card-body mb-4 card_content">
+                              <h3 class="card_title" style="margin-bottom:20px; "><%= allPosts[i].Title %></h3>
+                              <span class="card_subtitle" style="font-size: 15px;">Created By: <a href="/profile/<%= allPosts[i].Username %>"><%= allPosts[i].Username %></a></span>
+                              <p class="card-text card_description" ;;><%=allPosts[i].Description.substring(0, 90)%><br><a href="/post_details/<%= allPosts[i].Title %>">Read more</a></p>
+                            </div>
+                          </div>
+                        <% } %>
+                      </div>
                 </div>
+                <% } else { %>
+                    <div class="pic">
+                        <img src="/img/profilePic/<%= otheruser.ProfileImg %>" alt="Profile picture" class="profile_pic">
+                    </div>
+                    <div class="mainbody">
+                        <p class="name">
+                            <%= otheruser.Name %>
+                        </p>
+                        <p class="fieldOfInterest">A <%= otheruser.FieldOfInterest %> enthusiast</p>
+                        <div>
+                            <i class="icons fa-solid fa-envelope" data-toggle="popover" title="<%= user.Email %>"
+                                data-content="Some content inside the popover"></i>
+                            <i class="icons fa-solid fa-phone" data-toggle="popover" title="<%= user.PhoneNumber %>"></i>
+                            <i class="icons fa-sharp fa-solid fa-location-dot" data-toggle="popover"
+                                title="<%= user.Address %>"></i>
+                            <!-- <i class="icons fa-solid fa-qrcode" data-toggle="popover" data-html="true" title = "<img src = '/img/qrPic/pulkit.png' />"></i> -->
+                        </div>
+                        <p class="bio">
+                            <%= otheruser.Bio %>
+                        </p>
+                        <div class="links">
+                            <a href="/profile/<%= otheruser.Username %>" class="linkbutton">
+                                <div class="link">
+                                    <i class="fa-solid fa-icons"></i>
+                                    <p>View Posts</p>
+                                </div>
+                            </a>
+                            <a>
+                                <div class="link">
+                                    <i class="fa-sharp fa-solid fa-camera-retro"></i>
+                                    <p>View Ideas</p>
+                                </div>
+                            </a>
+                            <% if(user && otheruser.Username == user.Username){ %>
+                            <a href = "/add_post">
+                                <div class="link">
+                                    <i class="fa-solid fa-square-plus"></i>
+                                    <p>Add Post</p>
+                                </div>
+                            </a>
+                            <% } %>
+                            <a href = "/qr/<%= otheruser.Username %>">
+                                <div class = "link">
+                                    <i class="fa-solid fa-qrcode"></i>
+                                    <p>View QR</p>
+                                </div>
+                            </a>
+                        </div>
+    
+                        <div class="cards">
+                            <% for(var i = 0; i < allPosts.length; i++){ %>
+                              <div class="card" style="border: 10px; border-color: black;">
+                                <img class="card-img-top" src="/img/postPic/<%= allPosts[i].postPicture %>" alt="Card image cap">
+                                <div class="card-body mb-4 card_content">
+                                  <h3 class="card_title" style="margin-bottom:20px; "><%= allPosts[i].Title %></h3>
+                                  <span class="card_subtitle" style="font-size: 15px;">Created By: <a href="/profile/<%= allPosts[i].Username %>"><%= allPosts[i].Username %></a></span>
+                                  <p class="card-text card_description" ;;><%=allPosts[i].Description.substring(0, 90)%><br><a href="/post_details/<%= allPosts[i].Title %>">Read more</a></p>
+                                </div>
+                              </div>
+                            <% } %>
+                          </div>
+                    </div>
+                    <% } %>
             </div>
         </div>
 
@@ -66,4 +145,5 @@
                 $('[data-toggle="popover"]').popover();
             });
         </script>
+        <%- include("partials/footer") -%>
         </body>

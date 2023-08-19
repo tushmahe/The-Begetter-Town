@@ -1,14 +1,75 @@
 <%- include("partials/boiler") -%>
-  <link rel="stylesheet" href="/css/dashboardstyles.css">
-  <link rel="stylesheet" href="/css/sidebarstyles.css">
+  <link rel="stylesheet" href="/css/profile.css">
+  <link rel="stylesheet" href="/css/cardstyle.css">
+
+  <!-- <link rel="stylesheet" href="/css/sidebarstyles.css"> -->
   <%- include("partials/header") -%>
-    <%- include("partials/sidebar") -%>
- 
-  
-    <div>
-        <img src = "/img/qrPic/<%= user %>.png" />
-    </div>
+
+    <!-- <body class="profile-page"> -->
+
+    <div class="parent_container">
+      <div class="cont">
+        <div class="pic">
+          <img src="/img/profilePic/<%= user.ProfileImg %>" alt="Profile picture" class="profile_pic">
+        </div>
+        <div class="mainbody">
+          <p class="name">
+            <%= user.Name %>
+          </p>
+          <p class="fieldOfInterest">A <%= user.FieldOfInterest %> enthusiast</p>
+          <div>
+            <i class="icons fa-solid fa-envelope" data-toggle="popover" title="<%= user.Email %>"
+              data-content="Some content inside the popover"></i>
+            <i class="icons fa-solid fa-phone" data-toggle="popover" title="<%= user.PhoneNumber %>"></i>
+            <i class="icons fa-sharp fa-solid fa-location-dot" data-toggle="popover" title="<%= user.Address %>"></i>
+            <!-- <i class="icons fa-solid fa-qrcode" data-toggle="popover" data-html="true" title = "<img src = '/img/qrPic/pulkit.png' />"></i> -->
+          </div>
+          <p class="bio">
+            <%= user.Bio %>
+          </p>
+          <div class="links">
+            <a href="/myprofile/<%= user.Username %>" class="linkbutton">
+              <div class="link">
+                <i class="fa-solid fa-icons"></i>
+                <p>View Posts</p>
+              </div>
+            </a>
+            <a>
+              <div class="link">
+                <i class="fa-sharp fa-solid fa-camera-retro"></i>
+                <p>View Ideas</p>
+              </div>
+            </a>
+            <a href="/add_post">
+              <div class="link">
+                <i class="fa-solid fa-square-plus"></i>
+                <p>Add Post</p>
+              </div>
+            </a>
+            <a href="/qr/<%= user.Username %>">
+              <div class="link">
+                <i class="fa-solid fa-qrcode"></i>
+                <p>View QR</p>
+              </div>
+            </a>
+          </div>
+
+          <!-- <img src="/img/qrPic/<%= username %>.png"> -->
+          <img src="/img/qrPic/pulkit.png" class = "qr">
+
+        </div>
+      </div>
     </div>
 
+
+
+    <div>
+
+    </div>
+    <script>
+      $(document).ready(function () {
+        $('[data-toggle="popover"]').popover();
+      });
+    </script>
     <%- include("partials/footer") -%>
-</body>
+    </body>

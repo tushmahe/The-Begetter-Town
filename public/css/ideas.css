@@ -19,6 +19,7 @@ body{
     display : inline-block;
     width : auto;
     height : auto;
+    margin-left: 0.1rem;
     font-size : 1.8rem;
     /* color : white; */
 }
@@ -39,8 +40,12 @@ body{
     /* justify-content: space-between;
     align-items : flex-start; */
     width : 60vw;
-    height : 100vh;
+    height : 39rem;
     background-color : #cccbc9;
+    margin-bottom: 30px;
+   
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(179, 176, 176, 0.19);
+  
 }
 .fltr-container{
     width : 20vw;
@@ -59,13 +64,14 @@ body{
     padding-bottom: 0.5rem;
     width : inherit;
     height : 6.5rem;
-    border-bottom : 3px solid black;
+    border-bottom : 1px solid rgb(120, 118, 118);
     display : flex;
     flex-direction : column;
     flex-wrap : nowrap;
     justify-content: space-evenly;
     align-items : center;
 }
+
 
 .filter-list{
     margin : 0px;
@@ -103,7 +109,7 @@ li:not(.filter-list-items:first-of-type):hover{
     color : black;
 }
 .text-content{
-    font-size : 0.9rem;
+    font-size : 0.95rem;
     margin : 0px;
     padding : 0px;
     text-align : justify;
@@ -114,15 +120,20 @@ li:not(.filter-list-items:first-of-type):hover{
 .containers h6{
     width : 59vw;
     height : 3vh;
-    font-style: italic;
+    /* font-style: italic; */
     margin : 0px;
     padding : 0px;
-    
+    font-size : 0.75rem;
+    opacity : 0.8;
+    /* font- */
+    /* display : inline-block; */
     /* border : 1px solid black; */
 }
-.containers h7{
-    font-size: 0.5rem;
-}
+/* .containers h7{
+    display : inline;
+    align-self : flex-start;
+    font-size: .5rem;
+} */
 .text-content a{
     text-decoration: none;
     font-size : 0.7rem;
@@ -272,7 +283,7 @@ input[type="checkbox"]:checked{
     left : 0%;
     width : 100vw;
     height : 100vh;
-    border: 1px solid black;
+    border: 0.3px solid black;
     z-index : 10;
     opacity : 0.8;
     background-color : lightgrey;
@@ -303,4 +314,21 @@ input[type="checkbox"]:checked{
     width : 95%;
     font-size: 1rem;
 
+}
+.pagination{
+    justify-content: center;
+}
+.pageno{
+    background-color: #81C1C4;
+    color:white;
+}
+
+.containers:hover{
+  background-color: rgb(211, 211, 211);
+}
+
+.idea-img{
+    height: 60px;;
+    margin-bottom: 10px;
+    border-radius: 40px;
 }
